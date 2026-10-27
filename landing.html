@@ -1,0 +1,1270 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Savings Optimizer — Stack Every Saving</title>
+  <meta name="description" content="Add your cards once. Search any store. Get the optimal credit card + cashback portal combo in under 10 seconds. No account needed.">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <style>
+    /* ── Tokens ────────────────────────────────────────────────── */
+    :root {
+      --navy:        #0F172A;
+      --navy-mid:    #1E293B;
+      --navy-light:  #334155;
+      --primary:     #0EA5E9;
+      --primary-dk:  #0284C7;
+      --primary-lt:  #BAE6FD;
+      --success:     #10B981;
+      --success-dk:  #059669;
+      --success-bg:  #D1FAE5;
+      --gold:        #F59E0B;
+      --gold-lt:     #FEF3C7;
+      --white:       #FFFFFF;
+      --gray-50:     #F8FAFC;
+      --gray-100:    #F1F5F9;
+      --gray-200:    #E2E8F0;
+      --gray-400:    #94A3B8;
+      --gray-600:    #475569;
+      --gray-800:    #1E293B;
+      --gray-900:    #0F172A;
+      --radius-sm:   6px;
+      --radius:      12px;
+      --radius-lg:   20px;
+      --radius-xl:   28px;
+      --shadow-sm:   0 1px 3px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+      --shadow-md:   0 4px 16px rgba(0,0,0,.10), 0 2px 6px rgba(0,0,0,.06);
+      --shadow-lg:   0 12px 40px rgba(0,0,0,.14), 0 4px 12px rgba(0,0,0,.08);
+      --shadow-xl:   0 24px 64px rgba(0,0,0,.18);
+      --font-head:   'Plus Jakarta Sans', system-ui, sans-serif;
+      --font-body:   'Inter', system-ui, sans-serif;
+      --z-nav:       100;
+    }
+
+    /* ── Reset ─────────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; -webkit-text-size-adjust: 100%; }
+    body {
+      font-family: var(--font-body);
+      font-size: 16px;
+      line-height: 1.6;
+      color: var(--gray-900);
+      background: var(--white);
+      overflow-x: hidden;
+    }
+    img { display: block; max-width: 100%; }
+    a  { color: inherit; text-decoration: none; }
+    button { cursor: pointer; border: none; background: none; font: inherit; }
+    ul, ol { list-style: none; }
+
+    /* ── Skip link ──────────────────────────────────────────────── */
+    .skip-link {
+      position: absolute; top: -40px; left: 16px; z-index: 9999;
+      background: var(--primary); color: var(--white);
+      padding: 8px 16px; border-radius: var(--radius-sm);
+      font-size: .875rem; font-weight: 600;
+      transition: top .2s;
+    }
+    .skip-link:focus { top: 8px; }
+
+    /* ── Container ──────────────────────────────────────────────── */
+    .container { width: 100%; max-width: 1160px; margin: 0 auto; padding: 0 20px; }
+
+    /* ── Buttons ─────────────────────────────────────────────────  */
+    .btn {
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 13px 26px; border-radius: 100px;
+      font-family: var(--font-head); font-size: .95rem; font-weight: 700;
+      white-space: nowrap; transition: all .2s ease;
+      touch-action: manipulation;
+    }
+    .btn-primary {
+      background: var(--primary); color: var(--white);
+      box-shadow: 0 2px 8px rgba(14,165,233,.35);
+    }
+    .btn-primary:hover  { background: var(--primary-dk); box-shadow: 0 4px 16px rgba(14,165,233,.45); transform: translateY(-1px); }
+    .btn-primary:active { transform: translateY(0); }
+    .btn-ghost {
+      background: rgba(255,255,255,.1); color: var(--white);
+      border: 1.5px solid rgba(255,255,255,.25);
+    }
+    .btn-ghost:hover { background: rgba(255,255,255,.18); border-color: rgba(255,255,255,.45); }
+    .btn-outline {
+      background: transparent; color: var(--primary);
+      border: 1.5px solid var(--primary);
+    }
+    .btn-outline:hover { background: rgba(14,165,233,.06); }
+    .btn-dark-cta {
+      background: var(--white); color: var(--navy);
+      box-shadow: 0 2px 8px rgba(0,0,0,.15);
+    }
+    .btn-dark-cta:hover { background: var(--gray-50); transform: translateY(-1px); box-shadow: 0 4px 20px rgba(0,0,0,.2); }
+
+    /* ── Pill badge ──────────────────────────────────────────────── */
+    .pill {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 5px 12px; border-radius: 100px;
+      font-size: .78rem; font-weight: 600; letter-spacing: .04em; text-transform: uppercase;
+    }
+    .pill-blue { background: rgba(14,165,233,.12); color: var(--primary); }
+    .pill-green { background: var(--success-bg); color: var(--success-dk); }
+    .pill-gold  { background: var(--gold-lt); color: #92400E; }
+    .pill-white { background: rgba(255,255,255,.15); color: var(--white); border: 1px solid rgba(255,255,255,.2); }
+
+    /* ── Section utilities ──────────────────────────────────────── */
+    .section { padding: 96px 0; }
+    .section-sm { padding: 64px 0; }
+    .section-label {
+      font-family: var(--font-head); font-size: .8rem; font-weight: 700;
+      letter-spacing: .1em; text-transform: uppercase; color: var(--primary);
+      margin-bottom: 12px;
+    }
+    .section-title {
+      font-family: var(--font-head); font-size: clamp(1.8rem, 4vw, 2.75rem);
+      font-weight: 800; line-height: 1.2; color: var(--navy);
+      margin-bottom: 16px;
+    }
+    .section-sub {
+      font-size: 1.05rem; color: var(--gray-600); line-height: 1.7;
+      max-width: 560px;
+    }
+    .text-center { text-align: center; }
+    .text-center .section-sub { margin: 0 auto; }
+
+    /* ── Reveal animations ───────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(28px);
+      transition: opacity .55s cubic-bezier(.22,.68,0,1.2), transform .55s cubic-bezier(.22,.68,0,1.2);
+    }
+    .reveal.visible { opacity: 1; transform: none; }
+    .reveal-delay-1 { transition-delay: .08s; }
+    .reveal-delay-2 { transition-delay: .16s; }
+    .reveal-delay-3 { transition-delay: .24s; }
+    .reveal-delay-4 { transition-delay: .32s; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .reveal { opacity: 1; transform: none; transition: none; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       NAV
+    ══════════════════════════════════════════════════════════════ */
+    #site-nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: var(--z-nav);
+      padding: 0 20px;
+      transition: background .3s, box-shadow .3s, border-color .3s;
+    }
+    #site-nav.scrolled {
+      background: rgba(255,255,255,.95);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      box-shadow: 0 1px 0 rgba(0,0,0,.08);
+    }
+    .nav-inner {
+      max-width: 1160px; margin: 0 auto;
+      display: flex; align-items: center; gap: 32px;
+      height: 68px;
+    }
+    .nav-brand {
+      display: flex; align-items: center; gap: 9px;
+      font-family: var(--font-head); font-size: 1.05rem; font-weight: 800;
+      color: var(--white); transition: color .3s;
+      flex-shrink: 0;
+    }
+    #site-nav.scrolled .nav-brand { color: var(--navy); }
+    .nav-brand-icon {
+      width: 34px; height: 34px; border-radius: 9px;
+      background: var(--primary);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 1.1rem; color: var(--white); flex-shrink: 0;
+    }
+    .nav-links {
+      display: flex; align-items: center; gap: 4px;
+      margin-left: auto;
+    }
+    .nav-links a {
+      font-family: var(--font-head); font-size: .875rem; font-weight: 600;
+      color: rgba(255,255,255,.75); padding: 8px 14px; border-radius: 8px;
+      transition: color .2s, background .2s;
+    }
+    .nav-links a:hover { color: var(--white); background: rgba(255,255,255,.1); }
+    #site-nav.scrolled .nav-links a { color: var(--gray-600); }
+    #site-nav.scrolled .nav-links a:hover { color: var(--navy); background: var(--gray-100); }
+    .nav-cta { margin-left: 8px; }
+    .nav-cta .btn {
+      padding: 9px 20px; font-size: .875rem;
+      background: var(--primary); color: var(--white);
+      box-shadow: 0 2px 8px rgba(14,165,233,.3);
+    }
+    .nav-cta .btn:hover { background: var(--primary-dk); }
+    .nav-menu-btn {
+      display: none; align-items: center; justify-content: center;
+      width: 40px; height: 40px; border-radius: 8px;
+      color: var(--white); font-size: 1.4rem; margin-left: auto;
+      background: rgba(255,255,255,.1);
+    }
+    #site-nav.scrolled .nav-menu-btn { color: var(--navy); background: var(--gray-100); }
+
+    @media (max-width: 768px) {
+      .nav-links, .nav-cta { display: none; }
+      .nav-links.open {
+        display: flex; flex-direction: column; align-items: stretch; gap: 2px;
+        position: fixed; top: 68px; left: 0; right: 0;
+        background: var(--white);
+        padding: 12px 20px 20px; box-shadow: var(--shadow-lg);
+      }
+      .nav-links.open + .nav-cta {
+        display: block; padding: 0 20px 16px;
+        background: var(--white);
+        position: fixed; top: calc(68px + 200px); left: 0; right: 0;
+      }
+      .nav-links a { color: var(--gray-800); }
+      .nav-menu-btn { display: flex; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       HERO
+    ══════════════════════════════════════════════════════════════ */
+    #hero {
+      min-height: 100dvh;
+      background: var(--navy);
+      background-image:
+        radial-gradient(ellipse 80% 60% at 60% 120%, rgba(14,165,233,.18) 0%, transparent 70%),
+        radial-gradient(ellipse 50% 40% at 10% 0%, rgba(16,185,129,.10) 0%, transparent 60%);
+      display: flex; align-items: center;
+      padding: 100px 0 80px;
+      position: relative; overflow: hidden;
+    }
+    #hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(255,255,255,.025) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.025) 1px, transparent 1px);
+      background-size: 60px 60px;
+      mask-image: radial-gradient(ellipse 80% 80% at 50% 50%, black 30%, transparent 100%);
+    }
+    .hero-inner {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 64px;
+      align-items: center; position: relative;
+    }
+    .hero-text { max-width: 560px; }
+    .hero-eyebrow { margin-bottom: 20px; }
+    .hero-h1 {
+      font-family: var(--font-head);
+      font-size: clamp(2.4rem, 5.5vw, 3.75rem);
+      font-weight: 800; line-height: 1.08; letter-spacing: -.02em;
+      color: var(--white);
+      margin-bottom: 22px;
+    }
+    .hero-h1 em { font-style: normal; color: var(--primary); }
+    .hero-sub {
+      font-size: 1.1rem; line-height: 1.7;
+      color: rgba(255,255,255,.65);
+      margin-bottom: 36px; max-width: 480px;
+    }
+    .hero-actions {
+      display: flex; flex-wrap: wrap; gap: 12px;
+      margin-bottom: 48px;
+    }
+    .hero-trust {
+      display: flex; align-items: center; gap: 10px;
+      font-size: .82rem; color: rgba(255,255,255,.45);
+    }
+    .hero-trust-dots {
+      display: flex; gap: 4px;
+    }
+    .hero-trust-dot {
+      width: 8px; height: 8px; border-radius: 50%;
+      background: var(--success);
+    }
+
+    /* ── Hero visual / Mock card ───────────────────────────────── */
+    .hero-visual {
+      display: flex; justify-content: center; align-items: center;
+      position: relative;
+    }
+    .mock-wrap {
+      position: relative; width: 100%; max-width: 420px;
+      filter: drop-shadow(0 40px 80px rgba(0,0,0,.5));
+    }
+    .mock-glow {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 320px; height: 320px; border-radius: 50%;
+      background: radial-gradient(circle, rgba(14,165,233,.25) 0%, transparent 70%);
+      pointer-events: none;
+      animation: glow-pulse 4s ease-in-out infinite;
+    }
+    @keyframes glow-pulse {
+      0%, 100% { opacity: .7; transform: translate(-50%,-50%) scale(1); }
+      50%       { opacity: 1;  transform: translate(-50%,-50%) scale(1.15); }
+    }
+
+    .mock-card {
+      background: rgba(255,255,255,.97);
+      border-radius: var(--radius-xl);
+      padding: 24px;
+      position: relative; z-index: 2;
+      animation: float-card 6s ease-in-out infinite;
+    }
+    @keyframes float-card {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-8px); }
+    }
+
+    .mock-search-bar {
+      display: flex; align-items: center; gap: 10px;
+      background: var(--gray-100); border-radius: 50px;
+      padding: 10px 16px; margin-bottom: 20px;
+    }
+    .mock-search-bar i { color: var(--gray-400); font-size: 1rem; }
+    .mock-search-query { font-family: var(--font-head); font-size: .88rem; font-weight: 600; color: var(--navy); }
+    .mock-search-badge {
+      margin-left: auto;
+      font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em;
+      background: rgba(14,165,233,.12); color: var(--primary);
+      padding: 3px 8px; border-radius: 100px;
+    }
+
+    .mock-best-label {
+      display: flex; align-items: center; gap: 7px;
+      font-family: var(--font-head); font-size: .78rem; font-weight: 700;
+      color: var(--gold); text-transform: uppercase; letter-spacing: .07em;
+      margin-bottom: 8px;
+    }
+    .mock-rate {
+      font-family: var(--font-head); font-size: 2.4rem; font-weight: 800;
+      color: var(--success-dk); line-height: 1; margin-bottom: 4px;
+    }
+    .mock-rate-sub {
+      font-size: .8rem; color: var(--gray-400); margin-bottom: 20px;
+    }
+
+    .mock-row {
+      display: flex; align-items: center; gap: 12px;
+      padding: 12px 0; border-top: 1px solid var(--gray-100);
+    }
+    .mock-icon-wrap {
+      width: 38px; height: 38px; border-radius: 10px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.1rem;
+    }
+    .mock-icon-blue { background: rgba(14,165,233,.12); color: var(--primary); }
+    .mock-icon-green { background: rgba(16,185,129,.12); color: var(--success-dk); }
+    .mock-row-label { font-family: var(--font-head); font-size: .82rem; font-weight: 700; color: var(--navy); }
+    .mock-row-sub { font-size: .73rem; color: var(--gray-400); margin-top: 1px; }
+    .mock-pct { margin-left: auto; font-family: var(--font-head); font-size: 1rem; font-weight: 800; color: var(--navy); }
+
+    .mock-divider {
+      text-align: center; font-size: 1rem; color: var(--gray-400); font-weight: 700;
+      padding: 4px 0;
+    }
+
+    .mock-total {
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(135deg, var(--success-dk), #059669);
+      border-radius: var(--radius); padding: 14px 16px; margin-top: 16px;
+    }
+    .mock-total-label { font-size: .82rem; color: rgba(255,255,255,.8); font-weight: 500; }
+    .mock-total-val { font-family: var(--font-head); font-size: 1.25rem; font-weight: 800; color: var(--white); }
+
+    /* floating context card */
+    .mock-float-badge {
+      position: absolute; right: -28px; bottom: 80px;
+      background: var(--white); border-radius: var(--radius);
+      padding: 10px 14px;
+      box-shadow: var(--shadow-lg);
+      display: flex; align-items: center; gap: 9px;
+      font-size: .78rem; font-weight: 600; color: var(--navy);
+      animation: float-badge 6s ease-in-out 1s infinite;
+      white-space: nowrap; z-index: 3;
+    }
+    .mock-float-badge i { color: var(--success-dk); font-size: 1.1rem; }
+    @keyframes float-badge {
+      0%, 100% { transform: translateY(0); }
+      50%       { transform: translateY(-5px); }
+    }
+    .mock-float-badge-2 {
+      position: absolute; left: -24px; top: 40px;
+      background: var(--navy); border-radius: var(--radius);
+      padding: 9px 13px;
+      box-shadow: var(--shadow-lg);
+      display: flex; align-items: center; gap: 8px;
+      font-size: .76rem; font-weight: 600; color: var(--white);
+      animation: float-badge 6s ease-in-out 2.5s infinite;
+      white-space: nowrap; z-index: 3;
+    }
+    .mock-float-badge-2 i { color: var(--gold); font-size: 1rem; }
+
+    @media (max-width: 900px) {
+      .hero-inner { grid-template-columns: 1fr; }
+      .hero-visual { display: none; }
+    }
+    @media (max-width: 480px) {
+      .hero-actions { flex-direction: column; }
+      .hero-actions .btn { justify-content: center; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       TRUST BAR
+    ══════════════════════════════════════════════════════════════ */
+    #trust {
+      padding: 32px 0;
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-200);
+      overflow: hidden;
+    }
+    .trust-label {
+      text-align: center;
+      font-size: .75rem; font-weight: 700; letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gray-400); margin-bottom: 20px;
+    }
+    .trust-scroll-wrap { overflow: hidden; position: relative; }
+    .trust-scroll-wrap::before,
+    .trust-scroll-wrap::after {
+      content: ''; position: absolute; top: 0; bottom: 0; width: 80px; z-index: 2;
+      pointer-events: none;
+    }
+    .trust-scroll-wrap::before { left: 0; background: linear-gradient(to right, var(--white), transparent); }
+    .trust-scroll-wrap::after  { right: 0; background: linear-gradient(to left, var(--white), transparent); }
+    .trust-track {
+      display: flex; gap: 48px; align-items: center;
+      animation: scroll-x 28s linear infinite;
+      width: max-content;
+    }
+    @keyframes scroll-x {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .trust-track { animation: none; }
+    }
+    .trust-item {
+      font-family: var(--font-head); font-size: .95rem; font-weight: 700;
+      color: var(--gray-400); white-space: nowrap;
+      transition: color .2s;
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       HOW IT WORKS
+    ══════════════════════════════════════════════════════════════ */
+    #how { background: var(--gray-50); }
+    .steps-grid {
+      display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+      margin-top: 56px; position: relative;
+    }
+    .steps-grid::before {
+      content: '';
+      position: absolute; top: 36px; left: calc(16.67% + 20px); right: calc(16.67% + 20px);
+      height: 2px;
+      background: linear-gradient(to right, var(--primary), var(--success));
+      border-radius: 2px;
+    }
+    .step-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 32px 28px;
+      box-shadow: var(--shadow-sm);
+      text-align: center;
+      position: relative;
+    }
+    .step-num {
+      width: 52px; height: 52px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px;
+      font-family: var(--font-head); font-size: 1.1rem; font-weight: 800;
+    }
+    .step-num-1 { background: rgba(14,165,233,.12); color: var(--primary); }
+    .step-num-2 { background: rgba(245,158,11,.12); color: var(--gold); }
+    .step-num-3 { background: rgba(16,185,129,.12); color: var(--success-dk); }
+    .step-icon {
+      width: 52px; height: 52px; border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 20px; font-size: 1.4rem;
+    }
+    .step-title {
+      font-family: var(--font-head); font-size: 1.1rem; font-weight: 800;
+      color: var(--navy); margin-bottom: 10px;
+    }
+    .step-body { font-size: .9rem; color: var(--gray-600); line-height: 1.65; }
+    @media (max-width: 768px) {
+      .steps-grid { grid-template-columns: 1fr; }
+      .steps-grid::before { display: none; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       SAVINGS STACK
+    ══════════════════════════════════════════════════════════════ */
+    #stack { background: var(--white); }
+    .stack-grid {
+      display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px;
+      margin-top: 56px;
+    }
+    .stack-card {
+      border: 1.5px solid var(--gray-200); border-radius: var(--radius-lg);
+      padding: 28px 28px 24px; position: relative; overflow: hidden;
+      transition: border-color .25s, box-shadow .25s, transform .25s;
+    }
+    .stack-card:hover {
+      border-color: var(--primary); box-shadow: var(--shadow-md);
+      transform: translateY(-3px);
+    }
+    .stack-card::before {
+      content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    }
+    .stack-card-1::before { background: linear-gradient(to right, var(--primary), var(--primary-dk)); }
+    .stack-card-2::before { background: linear-gradient(to right, var(--success-dk), var(--success)); }
+    .stack-card-3::before { background: linear-gradient(to right, var(--gold), #F97316); }
+    .stack-card-4::before { background: linear-gradient(to right, #8B5CF6, #6366F1); }
+    .stack-layer-badge {
+      display: inline-flex; align-items: center;
+      font-size: .72rem; font-weight: 700; text-transform: uppercase; letter-spacing: .07em;
+      padding: 3px 9px; border-radius: 100px; margin-bottom: 16px;
+    }
+    .stack-icon-wrap {
+      width: 44px; height: 44px; border-radius: 12px; margin-bottom: 16px;
+      display: flex; align-items: center; justify-content: center; font-size: 1.3rem;
+    }
+    .stack-icon-1 { background: rgba(14,165,233,.12); color: var(--primary); }
+    .stack-icon-2 { background: rgba(16,185,129,.12); color: var(--success-dk); }
+    .stack-icon-3 { background: rgba(245,158,11,.12); color: var(--gold); }
+    .stack-icon-4 { background: rgba(139,92,246,.12); color: #8B5CF6; }
+    .stack-title {
+      font-family: var(--font-head); font-size: 1.05rem; font-weight: 800;
+      color: var(--navy); margin-bottom: 8px;
+    }
+    .stack-body { font-size: .875rem; color: var(--gray-600); line-height: 1.65; }
+    .stack-examples {
+      display: flex; flex-wrap: wrap; gap: 6px; margin-top: 14px;
+    }
+    .stack-ex {
+      font-size: .72rem; font-weight: 600; color: var(--gray-600);
+      background: var(--gray-100); padding: 3px 8px; border-radius: 6px;
+    }
+    @media (max-width: 640px) {
+      .stack-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       EXAMPLE CALCULATION
+    ══════════════════════════════════════════════════════════════ */
+    #example {
+      background: var(--navy);
+      background-image: radial-gradient(ellipse 70% 60% at 50% 110%, rgba(14,165,233,.18) 0%, transparent 65%);
+    }
+    .example-inner { display: grid; grid-template-columns: 1fr 1.2fr; gap: 64px; align-items: center; }
+    .example-text .section-title { color: var(--white); }
+    .example-text .section-sub { color: rgba(255,255,255,.6); }
+    .example-scenario {
+      margin-top: 28px; padding: 20px;
+      background: rgba(255,255,255,.06); border: 1px solid rgba(255,255,255,.1);
+      border-radius: var(--radius); font-size: .88rem; color: rgba(255,255,255,.75);
+    }
+    .example-scenario strong { color: var(--white); }
+
+    .calc-card {
+      background: var(--white); border-radius: var(--radius-xl);
+      padding: 28px; box-shadow: var(--shadow-xl);
+    }
+    .calc-header {
+      display: flex; align-items: center; justify-content: space-between;
+      margin-bottom: 24px; padding-bottom: 18px; border-bottom: 1px solid var(--gray-100);
+    }
+    .calc-store { font-family: var(--font-head); font-size: 1rem; font-weight: 800; color: var(--navy); }
+    .calc-amount { font-family: var(--font-head); font-size: .88rem; font-weight: 600; color: var(--gray-600); }
+
+    .calc-row {
+      display: flex; align-items: flex-start; gap: 12px;
+      padding: 12px 0; border-bottom: 1px solid var(--gray-100);
+    }
+    .calc-row:last-of-type { border-bottom: none; }
+    .calc-row-icon {
+      width: 32px; height: 32px; border-radius: 8px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: .9rem;
+    }
+    .ci-purple { background: rgba(139,92,246,.12); color: #8B5CF6; }
+    .ci-blue   { background: rgba(14,165,233,.12); color: var(--primary); }
+    .ci-green  { background: rgba(16,185,129,.12); color: var(--success-dk); }
+    .ci-gold   { background: rgba(245,158,11,.12); color: var(--gold); }
+    .calc-row-label { font-size: .83rem; font-weight: 600; color: var(--navy); }
+    .calc-row-sub   { font-size: .74rem; color: var(--gray-400); margin-top: 2px; }
+    .calc-row-amt   { margin-left: auto; font-family: var(--font-head); font-size: .95rem; font-weight: 800; color: var(--success-dk); white-space: nowrap; }
+    .calc-row-neg   { color: var(--primary); }
+
+    .calc-total {
+      display: flex; align-items: center; justify-content: space-between;
+      background: linear-gradient(135deg, var(--success-dk), #10B981);
+      border-radius: var(--radius); padding: 16px 18px; margin-top: 16px;
+    }
+    .calc-total-left { font-size: .82rem; color: rgba(255,255,255,.85); font-weight: 500; }
+    .calc-total-val { font-family: var(--font-head); font-size: 1.4rem; font-weight: 800; color: var(--white); }
+    .calc-total-pct { font-size: .78rem; color: rgba(255,255,255,.7); }
+
+    @media (max-width: 768px) {
+      .example-inner { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       NEUTRAL ADVISOR
+    ══════════════════════════════════════════════════════════════ */
+    #neutral { background: var(--gray-50); }
+    .neutral-grid {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 48px;
+      align-items: center; margin-top: 48px;
+    }
+    .neutral-feat {
+      display: flex; gap: 16px; align-items: flex-start; margin-bottom: 28px;
+    }
+    .neutral-feat:last-child { margin-bottom: 0; }
+    .neutral-icon {
+      width: 44px; height: 44px; border-radius: 12px; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center; font-size: 1.2rem;
+      background: rgba(14,165,233,.1); color: var(--primary);
+    }
+    .neutral-feat-title {
+      font-family: var(--font-head); font-size: 1rem; font-weight: 800;
+      color: var(--navy); margin-bottom: 4px;
+    }
+    .neutral-feat-body { font-size: .875rem; color: var(--gray-600); line-height: 1.6; }
+
+    .vs-card {
+      background: var(--white); border-radius: var(--radius-lg);
+      padding: 24px; box-shadow: var(--shadow-md);
+    }
+    .vs-title {
+      font-family: var(--font-head); font-size: .8rem; font-weight: 700;
+      text-transform: uppercase; letter-spacing: .07em; color: var(--gray-400);
+      margin-bottom: 16px;
+    }
+    .vs-row {
+      display: flex; align-items: center; gap: 10px;
+      padding: 10px 0; border-bottom: 1px solid var(--gray-100);
+      font-size: .84rem;
+    }
+    .vs-row:last-child { border-bottom: none; }
+    .vs-check { color: var(--success-dk); font-size: 1rem; }
+    .vs-x     { color: #EF4444; font-size: 1rem; }
+    .vs-name  { font-weight: 600; color: var(--navy); }
+    .vs-note  { font-size: .75rem; color: var(--gray-400); margin-left: auto; }
+
+    @media (max-width: 768px) {
+      .neutral-grid { grid-template-columns: 1fr; }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       STATS BAR
+    ══════════════════════════════════════════════════════════════ */
+    #stats {
+      background: var(--white);
+      border-top: 1px solid var(--gray-200);
+      border-bottom: 1px solid var(--gray-200);
+      padding: 56px 0;
+    }
+    .stats-grid {
+      display: grid; grid-template-columns: repeat(4, 1fr); gap: 32px;
+      text-align: center;
+    }
+    .stat-val {
+      font-family: var(--font-head); font-size: 2.4rem; font-weight: 800;
+      color: var(--navy); line-height: 1; margin-bottom: 6px;
+    }
+    .stat-val span { color: var(--primary); }
+    .stat-label { font-size: .85rem; color: var(--gray-600); }
+    @media (max-width: 640px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       FINAL CTA
+    ══════════════════════════════════════════════════════════════ */
+    #cta-final {
+      background: var(--navy);
+      background-image: radial-gradient(ellipse 60% 80% at 50% 50%, rgba(14,165,233,.15) 0%, transparent 70%);
+      text-align: center; padding: 112px 0;
+    }
+    .cta-title {
+      font-family: var(--font-head);
+      font-size: clamp(2rem, 5vw, 3.2rem);
+      font-weight: 800; color: var(--white);
+      margin-bottom: 16px; line-height: 1.15;
+    }
+    .cta-sub { font-size: 1.05rem; color: rgba(255,255,255,.6); margin-bottom: 40px; }
+    .cta-actions { display: flex; justify-content: center; flex-wrap: wrap; gap: 14px; }
+    .cta-note {
+      margin-top: 20px; font-size: .8rem; color: rgba(255,255,255,.35);
+      display: flex; align-items: center; justify-content: center; gap: 16px;
+    }
+    .cta-note-item { display: flex; align-items: center; gap: 5px; }
+    .cta-note-item i { font-size: .85rem; }
+
+    /* ══════════════════════════════════════════════════════════════
+       FOOTER
+    ══════════════════════════════════════════════════════════════ */
+    #footer {
+      background: var(--navy-mid);
+      padding: 40px 0 32px;
+      border-top: 1px solid rgba(255,255,255,.07);
+    }
+    .footer-inner {
+      display: flex; align-items: center; justify-content: space-between;
+      flex-wrap: wrap; gap: 20px;
+    }
+    .footer-brand {
+      display: flex; align-items: center; gap: 9px;
+      font-family: var(--font-head); font-size: .95rem; font-weight: 800; color: var(--white);
+    }
+    .footer-links {
+      display: flex; gap: 24px; flex-wrap: wrap;
+    }
+    .footer-links a {
+      font-size: .82rem; color: rgba(255,255,255,.45);
+      transition: color .2s;
+    }
+    .footer-links a:hover { color: rgba(255,255,255,.8); }
+    .footer-copy {
+      width: 100%;
+      font-size: .76rem; color: rgba(255,255,255,.25);
+      margin-top: 24px; padding-top: 24px;
+      border-top: 1px solid rgba(255,255,255,.06);
+    }
+
+    /* ══════════════════════════════════════════════════════════════
+       UTILITY
+    ══════════════════════════════════════════════════════════════ */
+    .visually-hidden {
+      position: absolute; width: 1px; height: 1px;
+      padding: 0; margin: -1px; overflow: hidden;
+      clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+    }
+  </style>
+</head>
+<body>
+  <a href="#main" class="skip-link">Skip to main content</a>
+
+  <!-- ── Nav ────────────────────────────────────────────────────── -->
+  <nav id="site-nav" role="navigation" aria-label="Main navigation">
+    <div class="nav-inner">
+      <a href="landing.html" class="nav-brand" aria-label="Savings Optimizer home">
+        <div class="nav-brand-icon" aria-hidden="true">
+          <i class="ph ph-piggy-bank"></i>
+        </div>
+        Savings Optimizer
+      </a>
+      <ul class="nav-links" id="nav-links">
+        <li><a href="#how">How It Works</a></li>
+        <li><a href="#stack">The Stack</a></li>
+        <li><a href="#neutral">Why Us</a></li>
+      </ul>
+      <div class="nav-cta">
+        <a href="index.html" class="btn btn-primary" aria-label="Open the Savings Optimizer app">Try It Free</a>
+      </div>
+      <button class="nav-menu-btn" id="nav-toggle" aria-expanded="false" aria-controls="nav-links" aria-label="Toggle navigation menu">
+        <i class="ph ph-list" aria-hidden="true" id="nav-icon"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ── Hero ───────────────────────────────────────────────────── -->
+  <main id="main">
+  <section id="hero" aria-labelledby="hero-heading">
+    <div class="container">
+      <div class="hero-inner">
+        <div class="hero-text">
+          <div class="hero-eyebrow reveal">
+            <span class="pill pill-white"><i class="ph ph-lightning" aria-hidden="true"></i> Zero setup · No account needed</span>
+          </div>
+          <h1 class="hero-h1 reveal reveal-delay-1" id="hero-heading">
+            Stack every<br><em>saving.</em><br>Never miss a dollar.
+          </h1>
+          <p class="hero-sub reveal reveal-delay-2">
+            Add your credit cards once. Tell us your cashback portals.
+            Search any store to get the <strong style="color:rgba(255,255,255,.9)">optimal card + portal combo</strong>
+            in under 10 seconds — with a full dollar breakdown.
+          </p>
+          <div class="hero-actions reveal reveal-delay-3">
+            <a href="index.html" class="btn btn-primary" aria-label="Open the Savings Optimizer app">
+              <i class="ph ph-arrow-right" aria-hidden="true"></i> Try It Free
+            </a>
+            <a href="#how" class="btn btn-ghost">See How It Works</a>
+          </div>
+          <div class="hero-trust reveal reveal-delay-4">
+            <div class="hero-trust-dots" aria-hidden="true">
+              <div class="hero-trust-dot"></div>
+              <div class="hero-trust-dot"></div>
+              <div class="hero-trust-dot"></div>
+            </div>
+            Works with 50+ top online stores · 4 cashback portals · No card numbers ever
+          </div>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="mock-wrap">
+            <div class="mock-glow"></div>
+
+            <div class="mock-float-badge-2">
+              <i class="ph-fill ph-star" aria-hidden="true"></i>
+              Q4 rotating: 5% on Amazon
+            </div>
+
+            <div class="mock-card">
+              <div class="mock-search-bar">
+                <i class="ph ph-magnifying-glass"></i>
+                <span class="mock-search-query">Nike</span>
+                <span class="mock-search-badge">Retail</span>
+              </div>
+
+              <div class="mock-best-label">
+                <i class="ph-fill ph-trophy"></i> Best Combo
+              </div>
+              <div class="mock-rate">13%</div>
+              <div class="mock-rate-sub">combined cashback on $200 order</div>
+
+              <div class="mock-row">
+                <div class="mock-icon-wrap mock-icon-blue">
+                  <i class="ph ph-credit-card"></i>
+                </div>
+                <div>
+                  <div class="mock-row-label">Chase Freedom Flex</div>
+                  <div class="mock-row-sub">Retail (rotating Q4)</div>
+                </div>
+                <div class="mock-pct">5%</div>
+              </div>
+
+              <div class="mock-divider">+</div>
+
+              <div class="mock-row">
+                <div class="mock-icon-wrap mock-icon-green">
+                  <i class="ph ph-storefront"></i>
+                </div>
+                <div>
+                  <div class="mock-row-label">Rakuten</div>
+                  <div class="mock-row-sub">Cashback portal · checked Oct 23</div>
+                </div>
+                <div class="mock-pct">8%</div>
+              </div>
+
+              <div class="mock-total">
+                <div>
+                  <div class="mock-total-label">Total saved</div>
+                </div>
+                <div class="mock-total-val">$26.00</div>
+              </div>
+            </div>
+
+            <div class="mock-float-badge">
+              <i class="ph-fill ph-check-circle"></i>
+              $26 saved on this order
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Trust Bar ───────────────────────────────────────────────── -->
+  <section id="trust" aria-label="Supported stores">
+    <div class="trust-label">Works with 50+ top online stores</div>
+    <div class="trust-scroll-wrap">
+      <div class="trust-track" aria-hidden="true">
+        <!-- duplicated for seamless loop -->
+        <span class="trust-item">Amazon</span>
+        <span class="trust-item">Target</span>
+        <span class="trust-item">Nike</span>
+        <span class="trust-item">Macy's</span>
+        <span class="trust-item">Best Buy</span>
+        <span class="trust-item">Nordstrom</span>
+        <span class="trust-item">Walmart</span>
+        <span class="trust-item">eBay</span>
+        <span class="trust-item">Wayfair</span>
+        <span class="trust-item">Gap</span>
+        <span class="trust-item">Sephora</span>
+        <span class="trust-item">Old Navy</span>
+        <span class="trust-item">Chewy</span>
+        <span class="trust-item">Home Depot</span>
+        <span class="trust-item">Etsy</span>
+        <span class="trust-item">Booking.com</span>
+        <!-- repeat -->
+        <span class="trust-item">Amazon</span>
+        <span class="trust-item">Target</span>
+        <span class="trust-item">Nike</span>
+        <span class="trust-item">Macy's</span>
+        <span class="trust-item">Best Buy</span>
+        <span class="trust-item">Nordstrom</span>
+        <span class="trust-item">Walmart</span>
+        <span class="trust-item">eBay</span>
+        <span class="trust-item">Wayfair</span>
+        <span class="trust-item">Gap</span>
+        <span class="trust-item">Sephora</span>
+        <span class="trust-item">Old Navy</span>
+        <span class="trust-item">Chewy</span>
+        <span class="trust-item">Home Depot</span>
+        <span class="trust-item">Etsy</span>
+        <span class="trust-item">Booking.com</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── How It Works ────────────────────────────────────────────── -->
+  <section id="how" class="section" aria-labelledby="how-heading">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-label reveal">How it works</div>
+        <h2 class="section-title reveal reveal-delay-1" id="how-heading">Three steps to smarter savings</h2>
+        <p class="section-sub reveal reveal-delay-2">Set up once in under 5 minutes. Then search before every online purchase.</p>
+      </div>
+
+      <div class="steps-grid">
+        <div class="step-card reveal reveal-delay-1">
+          <div class="step-num step-num-1" aria-hidden="true">1</div>
+          <div class="step-title">Add your cards</div>
+          <p class="step-body">
+            Pick from our built-in library of 50+ cards. We already know every reward rate, rotating quarterly category, and bonus tier — you just select your cards.
+          </p>
+        </div>
+        <div class="step-card reveal reveal-delay-2">
+          <div class="step-num step-num-2" aria-hidden="true">2</div>
+          <div class="step-title">Choose your portals</div>
+          <p class="step-body">
+            Tell us which cashback portals you use — Rakuten, TopCashback, Capital One Shopping, BeFrugal. We track their rates for 50+ stores so you don't have to.
+          </p>
+        </div>
+        <div class="step-card reveal reveal-delay-3">
+          <div class="step-num step-num-3" aria-hidden="true">3</div>
+          <div class="step-title">Search any store</div>
+          <p class="step-body">
+            Type the store name before you buy. Get the optimal card + portal combo instantly, with a full dollar breakdown and stacking warnings.
+          </p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Savings Stack ────────────────────────────────────────────── -->
+  <section id="stack" class="section" aria-labelledby="stack-heading">
+    <div class="container">
+      <div class="text-center">
+        <div class="section-label reveal">The savings stack</div>
+        <h2 class="section-title reveal reveal-delay-1" id="stack-heading">Four layers. One recommendation.</h2>
+        <p class="section-sub reveal reveal-delay-2">
+          Most people leave 3 of these 4 layers on the table. Savings Optimizer stacks them all and shows you the result in dollars.
+        </p>
+      </div>
+
+      <div class="stack-grid">
+        <div class="stack-card stack-card-1 reveal reveal-delay-1">
+          <div class="stack-icon-wrap stack-icon-1" aria-hidden="true">
+            <i class="ph ph-credit-card"></i>
+          </div>
+          <div class="stack-title">Credit Card Rewards</div>
+          <p class="stack-body">
+            Standard rates, rotating quarterly bonuses, and user-chosen categories (like BofA Customized Cash) — all calculated automatically. We update rotating categories every quarter.
+          </p>
+          <div class="stack-examples" aria-label="Example cards">
+            <span class="stack-ex">Freedom Flex 5%</span>
+            <span class="stack-ex">Discover it 5%</span>
+            <span class="stack-ex">Amex Blue Cash 3%</span>
+          </div>
+        </div>
+
+        <div class="stack-card stack-card-2 reveal reveal-delay-2">
+          <div class="stack-icon-wrap stack-icon-2" aria-hidden="true">
+            <i class="ph ph-storefront"></i>
+          </div>
+          <div class="stack-title">Cashback Portals</div>
+          <p class="stack-body">
+            We track rates from all 4 major portals for 50+ stores and show you the best one among the portals you've joined. Rates include a "last checked" date so you can trust the number.
+          </p>
+          <div class="stack-examples" aria-label="Supported portals">
+            <span class="stack-ex">Rakuten</span>
+            <span class="stack-ex">TopCashback</span>
+            <span class="stack-ex">Capital One Shopping</span>
+            <span class="stack-ex">BeFrugal</span>
+          </div>
+        </div>
+
+        <div class="stack-card stack-card-3 reveal reveal-delay-3">
+          <div class="stack-icon-wrap stack-icon-3" aria-hidden="true">
+            <i class="ph ph-tag"></i>
+          </div>
+          <div class="stack-title">Card-Linked Offers</div>
+          <p class="stack-body">
+            Chase Offers, Amex Offers, BofA Deals — these targeted discounts are personal to your account. We tell you when your card probably has one and link you straight to check it.
+          </p>
+          <div class="stack-examples" aria-label="Example offers">
+            <span class="stack-ex">Amex: $30 back on $150</span>
+            <span class="stack-ex">Chase: $20 back</span>
+          </div>
+        </div>
+
+        <div class="stack-card stack-card-4 reveal reveal-delay-4">
+          <div class="stack-icon-wrap stack-icon-4" aria-hidden="true">
+            <i class="ph ph-percent"></i>
+          </div>
+          <div class="stack-title">Store's Own Offers</div>
+          <p class="stack-body">
+            New-customer discounts and portal-listed promo codes, applied to the base price first. We warn you when a code would cancel your portal cashback — because that's a real gotcha.
+          </p>
+          <div class="stack-examples" aria-label="Example store offers">
+            <span class="stack-ex">10% new customer</span>
+            <span class="stack-ex">Portal-safe codes only</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Example Calculation ─────────────────────────────────────── -->
+  <section id="example" class="section" aria-labelledby="example-heading">
+    <div class="container">
+      <div class="example-inner">
+        <div class="example-text">
+          <div class="section-label reveal" style="color:var(--primary-lt)">Real example</div>
+          <h2 class="section-title reveal reveal-delay-1" id="example-heading">See exactly what you'd save</h2>
+          <p class="section-sub reveal reveal-delay-2">Every recommendation shows a full dollar breakdown, so you always know where the number comes from.</p>
+          <div class="example-scenario reveal reveal-delay-3">
+            <strong>Scenario:</strong> $200 Nike order. You have Chase Freedom Flex, Amex card, and use Rakuten. Nike has a 10% new-customer offer. Amex is running a $20-back deal.
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-2">
+          <div class="calc-card">
+            <div class="calc-header">
+              <div>
+                <div class="calc-store">Nike</div>
+                <div class="calc-amount">$200.00 order</div>
+              </div>
+              <span class="pill pill-blue"><i class="ph ph-trophy" aria-hidden="true"></i> Best combo</span>
+            </div>
+
+            <div class="calc-row">
+              <div class="calc-row-icon ci-purple" aria-hidden="true"><i class="ph ph-percent"></i></div>
+              <div>
+                <div class="calc-row-label">New-customer offer</div>
+                <div class="calc-row-sub">Applied to order price first</div>
+              </div>
+              <div class="calc-row-amt calc-row-neg">−$20.00</div>
+            </div>
+            <div class="calc-row">
+              <div class="calc-row-icon ci-blue" aria-hidden="true"><i class="ph ph-credit-card"></i></div>
+              <div>
+                <div class="calc-row-label">Chase Freedom Flex</div>
+                <div class="calc-row-sub">5% retail · on $180 after discount</div>
+              </div>
+              <div class="calc-row-amt">+$9.00</div>
+            </div>
+            <div class="calc-row">
+              <div class="calc-row-icon ci-green" aria-hidden="true"><i class="ph ph-storefront"></i></div>
+              <div>
+                <div class="calc-row-label">Rakuten</div>
+                <div class="calc-row-sub">6% portal cashback · on $180</div>
+              </div>
+              <div class="calc-row-amt">+$10.80</div>
+            </div>
+            <div class="calc-row">
+              <div class="calc-row-icon ci-gold" aria-hidden="true"><i class="ph ph-tag"></i></div>
+              <div>
+                <div class="calc-row-label">Amex Offer</div>
+                <div class="calc-row-sub">$20 back on $150+ (you confirmed)</div>
+              </div>
+              <div class="calc-row-amt">+$20.00</div>
+            </div>
+
+            <div class="calc-total">
+              <div>
+                <div class="calc-total-left">Total saved on $200</div>
+                <div class="calc-total-pct">~30% effective rate</div>
+              </div>
+              <div class="calc-total-val" aria-label="$59.80 saved">$59.80</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Stats ───────────────────────────────────────────────────── -->
+  <section id="stats" aria-label="Key statistics">
+    <div class="container">
+      <dl class="stats-grid">
+        <div class="reveal">
+          <dt class="stat-label">Cards supported</dt>
+          <dd class="stat-val">50<span>+</span></dd>
+        </div>
+        <div class="reveal reveal-delay-1">
+          <dt class="stat-label">Stores with full data</dt>
+          <dd class="stat-val">50<span>+</span></dd>
+        </div>
+        <div class="reveal reveal-delay-2">
+          <dt class="stat-label">Cashback portals tracked</dt>
+          <dd class="stat-val"><span>4</span></dd>
+        </div>
+        <div class="reveal reveal-delay-3">
+          <dt class="stat-label">Setup time</dt>
+          <dd class="stat-val">&lt;<span>5</span> min</dd>
+        </div>
+      </dl>
+    </div>
+  </section>
+
+  <!-- ── Neutral Advisor ─────────────────────────────────────────── -->
+  <section id="neutral" class="section" aria-labelledby="neutral-heading">
+    <div class="container">
+      <div class="neutral-grid">
+        <div>
+          <div class="section-label reveal">Why it's different</div>
+          <h2 class="section-title reveal reveal-delay-1" id="neutral-heading">We're your advisor,<br>not a portal.</h2>
+
+          <div class="neutral-feat reveal reveal-delay-2">
+            <div class="neutral-icon" aria-hidden="true"><i class="ph ph-scales"></i></div>
+            <div>
+              <div class="neutral-feat-title">Truly neutral recommendations</div>
+              <p class="neutral-feat-body">We compare all 4 major portals and recommend whichever pays you the most for that store. We're not trying to sign you up for our own cashback program.</p>
+            </div>
+          </div>
+
+          <div class="neutral-feat reveal reveal-delay-3">
+            <div class="neutral-icon" aria-hidden="true"><i class="ph ph-lock"></i></div>
+            <div>
+              <div class="neutral-feat-title">No credentials. Ever.</div>
+              <p class="neutral-feat-body">You add card names only — never card numbers, bank logins, or portal logins. Your data stays in your browser's localStorage.</p>
+            </div>
+          </div>
+
+          <div class="neutral-feat reveal reveal-delay-4">
+            <div class="neutral-icon" aria-hidden="true"><i class="ph ph-warning-circle"></i></div>
+            <div>
+              <div class="neutral-feat-title">Stacking warnings built in</div>
+              <p class="neutral-feat-body">We alert you when a promo code would cancel your portal cashback — a real gotcha that most tools ignore entirely.</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="reveal reveal-delay-2">
+          <div class="vs-card">
+            <div class="vs-title">How we compare</div>
+
+            <div class="vs-row">
+              <i class="ph-fill ph-check-circle vs-check" aria-label="Yes"></i>
+              <span class="vs-name">Savings Optimizer</span>
+              <span class="vs-note">Compares all portals · no credentials</span>
+            </div>
+            <div class="vs-row">
+              <i class="ph-fill ph-x-circle vs-x" aria-label="No"></i>
+              <span class="vs-name">Rakuten Extension</span>
+              <span class="vs-note">Shows Rakuten's rate only</span>
+            </div>
+            <div class="vs-row">
+              <i class="ph-fill ph-x-circle vs-x" aria-label="No"></i>
+              <span class="vs-name">Capital One Shopping</span>
+              <span class="vs-note">Shows C1 rate only</span>
+            </div>
+            <div class="vs-row">
+              <i class="ph-fill ph-minus-circle" style="color:var(--gold)" aria-label="Partial"></i>
+              <span class="vs-name">CashbackMonitor</span>
+              <span class="vs-note">Portals only · doesn't know your cards</span>
+            </div>
+            <div class="vs-row">
+              <i class="ph-fill ph-minus-circle" style="color:var(--gold)" aria-label="Partial"></i>
+              <span class="vs-name">Kudos</span>
+              <span class="vs-note">Cards + own portal · needs credentials</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ── Final CTA ────────────────────────────────────────────────── -->
+  <section id="cta-final" aria-labelledby="cta-heading">
+    <div class="container">
+      <h2 class="cta-title reveal" id="cta-heading">
+        Start saving more<br>on your next purchase.
+      </h2>
+      <p class="cta-sub reveal reveal-delay-1">Add your cards in under 5 minutes. No account, no card numbers, no extensions.</p>
+      <div class="cta-actions reveal reveal-delay-2">
+        <a href="index.html" class="btn btn-dark-cta" aria-label="Open the Savings Optimizer app">
+          <i class="ph ph-arrow-right" aria-hidden="true"></i> Open the App
+        </a>
+        <a href="#how" class="btn btn-ghost">How It Works</a>
+      </div>
+      <p class="cta-note reveal reveal-delay-3" aria-label="App features: no signup required, works in your browser, 100% free">
+        <span class="cta-note-item"><i class="ph ph-check" aria-hidden="true"></i> No signup required</span>
+        <span class="cta-note-item"><i class="ph ph-check" aria-hidden="true"></i> Works in your browser</span>
+        <span class="cta-note-item"><i class="ph ph-check" aria-hidden="true"></i> 100% free</span>
+      </p>
+    </div>
+  </section>
+  </main>
+
+  <!-- ── Footer ───────────────────────────────────────────────────── -->
+  <footer id="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer-inner">
+        <div class="footer-brand">
+          <div class="nav-brand-icon" aria-hidden="true"><i class="ph ph-piggy-bank"></i></div>
+          Savings Optimizer
+        </div>
+        <nav class="footer-links" aria-label="Footer navigation">
+          <a href="#how">How It Works</a>
+          <a href="#stack">The Stack</a>
+          <a href="#neutral">Why Us</a>
+          <a href="index.html">Open App</a>
+        </nav>
+      </div>
+      <p class="footer-copy">
+        © 2026 Savings Optimizer · No credentials, ever · Data stays in your browser · Built for online shoppers who want every dollar.
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    // ── Nav scroll behavior ──────────────────────────────────────
+    const nav = document.getElementById('site-nav');
+    const onScroll = () => {
+      nav.classList.toggle('scrolled', window.scrollY > 48);
+    };
+    window.addEventListener('scroll', onScroll, { passive: true });
+    onScroll();
+
+    // ── Mobile menu ──────────────────────────────────────────────
+    const toggle = document.getElementById('nav-toggle');
+    const navLinks = document.getElementById('nav-links');
+    const navIcon  = document.getElementById('nav-icon');
+    toggle.addEventListener('click', () => {
+      const open = navLinks.classList.toggle('open');
+      toggle.setAttribute('aria-expanded', open);
+      navIcon.className = open ? 'ph ph-x' : 'ph ph-list';
+    });
+    // close on link click
+    navLinks.querySelectorAll('a').forEach(a => {
+      a.addEventListener('click', () => {
+        navLinks.classList.remove('open');
+        toggle.setAttribute('aria-expanded', 'false');
+        navIcon.className = 'ph ph-list';
+      });
+    });
+
+    // ── Reveal on scroll ─────────────────────────────────────────
+    if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const els = document.querySelectorAll('.reveal');
+      const observer = new IntersectionObserver(
+        (entries) => entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } }),
+        { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+      );
+      els.forEach(el => observer.observe(el));
+    } else {
+      document.querySelectorAll('.reveal').forEach(el => el.classList.add('visible'));
+    }
+
+    // ── Hero elements fire immediately ───────────────────────────
+    document.querySelectorAll('#hero .reveal').forEach((el, i) => {
+      setTimeout(() => el.classList.add('visible'), 80 + i * 80);
+    });
+  </script>
+</body>
+</html>

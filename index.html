@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Savings Optimizer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
+</head>
+<body>
+<div id="app">
+
+  <!-- ── Header ────────────────────────────────────────────────────────────── -->
+  <header id="app-header">
+    <div class="header-inner">
+      <div class="brand">
+        <i class="ph ph-piggy-bank brand-icon" aria-hidden="true"></i>
+        <span class="brand-name">Savings Optimizer</span>
+      </div>
+      <div class="header-actions">
+        <button id="btn-export" class="icon-btn" title="Export data" aria-label="Export data"><i class="ph ph-download-simple" aria-hidden="true"></i></button>
+        <button id="btn-theme"  class="icon-btn" title="Toggle theme" aria-label="Toggle theme"><i class="ph ph-moon" aria-hidden="true"></i></button>
+      </div>
+    </div>
+  </header>
+
+  <!-- ── Main panels ───────────────────────────────────────────────────────── -->
+  <main id="main-content">
+
+    <!-- Search panel -->
+    <section id="panel-search" class="panel active">
+
+      <div class="search-wrap">
+        <div class="search-box">
+          <i class="ph ph-magnifying-glass search-icon" aria-hidden="true"></i>
+          <input type="text" id="search-input"
+                 placeholder="Search a store (Amazon, Macy's…)"
+                 autocomplete="off" spellcheck="false">
+          <button id="search-clear" class="clear-btn" aria-label="Clear search" hidden><i class="ph ph-x" aria-hidden="true"></i></button>
+        </div>
+        <div id="search-autocomplete" class="autocomplete-dropdown" hidden></div>
+      </div>
+
+      <!-- Initial state (shown before any search) -->
+      <div id="search-initial">
+
+        <!-- Empty state: no cards yet -->
+        <div id="search-empty-state" class="empty-state">
+          <div class="empty-icon"><i class="ph ph-credit-card" aria-hidden="true"></i></div>
+          <h2>Set up your wallet</h2>
+          <p>Add your credit cards and cashback portals to get personalized savings recommendations.</p>
+          <div class="empty-actions">
+            <button class="btn-primary" data-nav="cards">Add a Card</button>
+            <button class="btn-secondary" data-nav="portals">Add a Portal</button>
+          </div>
+        </div>
+
+        <!-- Quick searches (shown after cards are added) -->
+        <div id="recent-searches" class="recent-searches" hidden>
+          <div class="section-label">Recent</div>
+          <div id="recent-list" class="recent-list"></div>
+        </div>
+
+        <div id="quick-searches-wrap" style="margin-top:12px">
+          <div class="section-label">Popular stores</div>
+          <div id="quick-searches" class="recent-list"></div>
+        </div>
+
+      </div><!-- /#search-initial -->
+
+      <!-- Search results -->
+      <div id="search-results" hidden>
+        <div class="results-merchant">
+          <span id="results-merchant-name" class="results-merchant-name"></span>
+          <span id="results-category-badge" class="category-badge"></span>
+        </div>
+        <div id="best-combo"></div>
+        <div id="other-combos"></div>
+        <div id="tip-banner" hidden></div>
+        <div id="category-override" class="category-override" hidden>
+          <p>We couldn't identify this merchant's category. What are you shopping for?</p>
+          <div id="category-buttons" class="category-grid"></div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- My Cards panel -->
+    <section id="panel-cards" class="panel">
+      <div class="panel-header">
+        <h2>My Cards</h2>
+        <button id="btn-add-card" class="btn-primary btn-sm">+ Add Card</button>
+      </div>
+      <div id="cards-list" class="cards-list"></div>
+      <div id="cards-empty" class="empty-state" hidden>
+        <div class="empty-icon"><i class="ph ph-credit-card" aria-hidden="true"></i></div>
+        <h2>No cards yet</h2>
+        <p>Add your credit cards to start getting personalized savings recommendations.</p>
+        <button id="btn-add-card-empty" class="btn-primary">+ Add Your First Card</button>
+      </div>
+    </section>
+
+    <!-- My Portals panel -->
+    <section id="panel-portals" class="panel">
+      <div class="panel-header">
+        <h2>My Portals</h2>
+        <button id="btn-add-portal" class="btn-primary btn-sm">+ Add Portal</button>
+      </div>
+      <div id="portals-list" class="portals-list"></div>
+      <div id="portals-empty" class="empty-state" hidden>
+        <div class="empty-icon"><i class="ph ph-storefront" aria-hidden="true"></i></div>
+        <h2>No portals yet</h2>
+        <p>Add cashback portals like Rakuten or TopCashback to stack savings on top of your card rewards.</p>
+        <button id="btn-add-portal-empty" class="btn-primary">+ Add a Portal</button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ── Bottom nav ─────────────────────────────────────────────────────────── -->
+  <nav id="bottom-nav">
+    <button class="nav-item active" data-panel="search">
+      <i class="ph ph-magnifying-glass nav-icon" aria-hidden="true"></i>
+      <span>Search</span>
+    </button>
+    <button class="nav-item" data-panel="cards">
+      <i class="ph ph-credit-card nav-icon" aria-hidden="true"></i>
+      <span>My Cards</span>
+    </button>
+    <button class="nav-item" data-panel="portals">
+      <i class="ph ph-storefront nav-icon" aria-hidden="true"></i>
+      <span>Portals</span>
+    </button>
+  </nav>
+
+  <!-- ── Modal: Card Picker ─────────────────────────────────────────────────── -->
+  <div id="modal-card-picker" class="modal-overlay" hidden>
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h3>Add Credit Cards</h3>
+        <button id="close-card-picker" class="modal-close" title="Close" aria-label="Close"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal-body" style="padding-top:12px">
+        <div class="modal-search">
+          <i class="ph ph-magnifying-glass" style="color:var(--text-3)" aria-hidden="true"></i>
+          <input id="card-picker-search" type="text" placeholder="Search cards…">
+        </div>
+        <div id="card-picker-grid" class="card-picker-grid"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="close-card-picker-cancel">Cancel</button>
+        <button class="btn-primary" id="btn-add-cards-confirm" disabled style="opacity:.5">Add Cards</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Modal: Portal Selector ────────────────────────────────────────────── -->
+  <div id="modal-portal-selector" class="modal-overlay" hidden>
+    <div class="modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h3>Cashback Portals</h3>
+        <button id="close-portal-selector" class="modal-close" title="Close" aria-label="Close"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal-body" style="padding-top:16px">
+        <p style="font-size:.85rem;color:var(--text-2);margin-bottom:14px">
+          Select the cashback portals you have accounts with. We track rates for 40–50 stores per portal.
+        </p>
+        <div id="portal-selector-grid" class="portal-selector-grid"></div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="close-portal-selector-cancel">Cancel</button>
+        <button class="btn-primary" id="btn-portal-confirm">Save</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Toast container ────────────────────────────────────────────────────── -->
+  <div id="toast-container" aria-live="polite"></div>
+
+  <!-- ── Onboarding overlay ─────────────────────────────────────────────────── -->
+  <div id="onboarding-overlay" hidden>
+    <div class="onboarding-inner">
+
+      <div class="step-dots">
+        <div class="step-dot active"></div>
+        <div class="step-dot"></div>
+        <div class="step-dot"></div>
+      </div>
+
+      <!-- Step 1: Welcome -->
+      <div class="onboarding-step active" id="ob-step-1">
+        <div class="onboarding-title">Stack your savings 💰</div>
+        <p class="onboarding-sub">
+          Tell us which credit cards you have and which cashback portals you use.
+          We'll instantly find the best combination for any online store.
+        </p>
+        <div class="onboarding-content" style="display:flex;flex-direction:column;gap:14px">
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:14px;background:var(--surface-2);border-radius:var(--radius)">
+            <i class="ph ph-credit-card" style="font-size:1.4rem;color:var(--primary);flex-shrink:0" aria-hidden="true"></i>
+            <div>
+              <div style="font-weight:600;font-size:.9rem">Your credit cards</div>
+              <div style="font-size:.82rem;color:var(--text-2);margin-top:2px">Just select your cards — we have all the reward rates.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:14px;background:var(--surface-2);border-radius:var(--radius)">
+            <i class="ph ph-storefront" style="font-size:1.4rem;color:var(--success);flex-shrink:0" aria-hidden="true"></i>
+            <div>
+              <div style="font-weight:600;font-size:.9rem">Cashback portals</div>
+              <div style="font-size:.82rem;color:var(--text-2);margin-top:2px">Rakuten, TopCashback, Capital One Shopping, BeFrugal — we track rates for 40+ stores each.</div>
+            </div>
+          </div>
+          <div style="display:flex;gap:12px;align-items:flex-start;padding:14px;background:var(--surface-2);border-radius:var(--radius)">
+            <i class="ph ph-trophy" style="font-size:1.4rem;color:#F59E0B;flex-shrink:0" aria-hidden="true"></i>
+            <div>
+              <div style="font-weight:600;font-size:.9rem">Stacked savings</div>
+              <div style="font-size:.82rem;color:var(--text-2);margin-top:2px">Search any store to see your best combo: e.g. "Use Discover 5% + Rakuten 8% = 13% at Macy's".</div>
+            </div>
+          </div>
+        </div>
+        <div class="onboarding-footer">
+          <button id="ob-start" class="btn-primary btn-full" style="padding:14px">Set Up My Wallet →</button>
+          <button id="ob-skip" class="btn-ghost btn-full" style="text-align:center;color:var(--text-2)">Skip for now</button>
+        </div>
+      </div>
+
+      <!-- Step 2: Pick cards -->
+      <div class="onboarding-step" id="ob-step-2">
+        <div class="onboarding-title">Which cards do you have?</div>
+        <p class="onboarding-sub">Select all the credit cards in your wallet. You can add more later.</p>
+        <div class="onboarding-content">
+          <div id="ob-card-picker" style="overflow-y:auto;max-height:45vh"></div>
+        </div>
+        <div class="onboarding-footer">
+          <button id="ob-cards-next" class="btn-primary btn-full" style="padding:14px">Continue →</button>
+        </div>
+      </div>
+
+      <!-- Step 3: Pick portals -->
+      <div class="onboarding-step" id="ob-step-3">
+        <div class="onboarding-title">Any cashback portals?</div>
+        <p class="onboarding-sub">Select the portals you have accounts with. We track their rates — you never enter them manually.</p>
+        <div class="onboarding-content">
+          <div id="ob-portal-selector"></div>
+        </div>
+        <div class="onboarding-footer">
+          <button id="ob-portals-done" class="btn-primary btn-full" style="padding:14px">Start Saving →</button>
+          <button id="ob-portals-skip" class="btn-ghost btn-full" style="text-align:center;color:var(--text-2)">Skip — add later</button>
+        </div>
+      </div>
+
+    </div><!-- /.onboarding-inner -->
+  </div><!-- /#onboarding-overlay -->
+
+</div><!-- /#app -->
+
+<script>
+  // Close secondary modal buttons
+  document.getElementById('close-card-picker-cancel')?.addEventListener('click', () =>
+    document.getElementById('modal-card-picker').setAttribute('hidden',''));
+  document.getElementById('close-portal-selector-cancel')?.addEventListener('click', () =>
+    document.getElementById('modal-portal-selector').setAttribute('hidden',''));
+</script>
+
+<script src="js/data.js"></script>
+<script src="js/storage.js"></script>
+<script src="js/engine.js"></script>
+<script src="js/app.js"></script>
+</body>
+</html>
