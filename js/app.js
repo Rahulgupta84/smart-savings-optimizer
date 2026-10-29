@@ -45,9 +45,12 @@ function applyTheme(theme) {
   else if (theme === 'light') html.setAttribute('data-theme','light');
   else                         html.removeAttribute('data-theme');
   const isLight = theme === 'light';
-  document.getElementById('btn-theme').innerHTML = isLight
+  const themeIcon = isLight
     ? '<i class="ph ph-moon" aria-hidden="true"></i>'
     : '<i class="ph ph-sun" aria-hidden="true"></i>';
+  document.getElementById('btn-theme').innerHTML = themeIcon;
+  const navThemeBtn = document.getElementById('btn-theme-nav');
+  if (navThemeBtn) navThemeBtn.innerHTML = themeIcon;
 }
 
 function toggleTheme() {
@@ -61,11 +64,10 @@ function toggleTheme() {
 
 function navigate(panelId) {
   document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
-  document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+  document.querySelectorAll('.nav-item, .left-nav-item').forEach(n => n.classList.remove('active'));
   const panel = document.getElementById('panel-' + panelId);
   if (panel) panel.classList.add('active');
-  const nav = document.querySelector(`.nav-item[data-panel="${panelId}"]`);
-  if (nav) nav.classList.add('active');
+  document.querySelectorAll(`[data-panel="${panelId}"]`).forEach(n => n.classList.add('active'));
   state.view = panelId;
   if (panelId === 'cards')   renderCards();
   if (panelId === 'portals') renderPortals();
@@ -582,7 +584,15 @@ function wireEvents() {
   document.getElementById('btn-theme').addEventListener('click', toggleTheme);
   document.getElementById('btn-export').addEventListener('click', handleExport);
 
-  // Nav
+  // Left sidebar (desktop)
+  document.querySelectorAll('.left-nav-item[data-panel]').forEach(btn =>
+    btn.addEventListener('click', () => navigate(btn.dataset.panel)));
+  document.getElementById('btn-add-card-nav')?.addEventListener('click', openCardPicker);
+  document.getElementById('btn-add-portal-nav')?.addEventListener('click', openPortalSelector);
+  document.getElementById('btn-theme-nav')?.addEventListener('click', toggleTheme);
+  document.getElementById('btn-export-nav')?.addEventListener('click', handleExport);
+
+  // Bottom nav (mobile)
   document.querySelectorAll('.nav-item[data-panel]').forEach(btn =>
     btn.addEventListener('click', () => navigate(btn.dataset.panel)));
 

@@ -1,26 +1,26 @@
 /* ── Design tokens ─────────────────────────────────────────────────────────── */
 :root {
-  /* Dark by default — matches landing.html navy palette */
-  --bg:          #0F172A;
-  --surface:     #1E293B;
-  --surface-2:   #243450;
-  --border:      rgba(255,255,255,.1);
-  --border-light:rgba(255,255,255,.06);
+  /* Light by default */
+  --bg:          #F0F4F8;
+  --surface:     #FFFFFF;
+  --surface-2:   #F8FAFC;
+  --border:      #E2E8F0;
+  --border-light:#EEF2F7;
 
-  --text:        #F1F5F9;
-  --text-2:      #94A3B8;
-  --text-3:      #64748B;
-  --text-inv:    #0F172A;
+  --text:        #0F172A;
+  --text-2:      #475569;
+  --text-3:      #94A3B8;
+  --text-inv:    #FFFFFF;
 
-  --brand:       #0F172A;
-  --brand-light: #1E293B;
+  --brand:       #0F2D52;
+  --brand-light: #1A4580;
   --primary:     #0EA5E9;
   --primary-dark:#0284C7;
   --success:     #10B981;
-  --success-bg:  rgba(16,185,129,.15);
+  --success-bg:  #ECFDF5;
   --success-2:   #34D399;
   --warning:     #F59E0B;
-  --warning-bg:  rgba(245,158,11,.12);
+  --warning-bg:  #FFFBEB;
   --danger:      #EF4444;
 
   --radius-sm:   8px;
@@ -28,10 +28,10 @@
   --radius-lg:   16px;
   --radius-xl:   24px;
 
-  --shadow-sm:   0 1px 3px rgba(0,0,0,.3);
-  --shadow:      0 2px 8px rgba(0,0,0,.35);
-  --shadow-md:   0 6px 20px rgba(0,0,0,.4), 0 2px 6px rgba(0,0,0,.2);
-  --shadow-lg:   0 16px 48px rgba(0,0,0,.5), 0 4px 12px rgba(0,0,0,.3);
+  --shadow-sm:   0 1px 2px rgba(0,0,0,.06);
+  --shadow:      0 1px 3px rgba(0,0,0,.1), 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md:   0 4px 8px rgba(0,0,0,.08), 0 2px 4px rgba(0,0,0,.04);
+  --shadow-lg:   0 10px 24px rgba(0,0,0,.10), 0 4px 8px rgba(0,0,0,.05);
 
   --nav-h:  60px;
   --tab-h:  64px;
@@ -61,7 +61,7 @@
   --shadow-lg:   0 16px 48px rgba(0,0,0,.5), 0 4px 12px rgba(0,0,0,.3);
 }
 
-/* Light mode override */
+/* Explicit light */
 [data-theme="light"] {
   --bg:          #F0F4F8;
   --surface:     #FFFFFF;
@@ -1086,64 +1086,121 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   #app { box-shadow: 0 0 0 1px var(--border), var(--shadow-lg); }
 }
 
-/* ── Wide-screen 3-column layout ─────────────────────────────────────────── */
+/* ── Left sidebar (hidden on mobile) ────────────────────────────────────────── */
+#left-nav {
+  display: none;
+}
+
+/* ── Desktop: sidebar + content layout ───────────────────────────────────── */
 @media (min-width: 768px) {
   html, body { height: 100%; overflow: hidden; }
 
   #app {
     max-width: 1100px;
     height: 100vh;
+    flex-direction: row;
     overflow: hidden;
-    display: flex;
-    flex-direction: column;
   }
 
-  /* 3-column grid: My Cards | Search | My Portals */
+  #app-header { display: none; }
+
+  /* Show the left sidebar */
+  #left-nav {
+    display: flex;
+    flex-direction: column;
+    width: 220px;
+    flex-shrink: 0;
+    background: #0F2D52;
+    padding: 20px 12px 16px;
+    height: 100vh;
+    overflow-y: auto;
+  }
+
+  .left-nav-brand {
+    display: flex;
+    align-items: center;
+    gap: 9px;
+    padding: 4px 8px 18px;
+    border-bottom: 1px solid rgba(255,255,255,.12);
+    margin-bottom: 10px;
+  }
+  .left-nav-brand .brand-icon { color: #60C8F5; font-size: 1.25rem; }
+  .left-nav-brand .brand-name { color: #fff; font-family: var(--font-head); font-weight: 700; font-size: .93rem; }
+
+  .left-nav-links {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .left-nav-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: var(--radius-sm);
+    font-size: .88rem;
+    font-weight: 500;
+    color: rgba(255,255,255,.65);
+    transition: background .15s, color .15s;
+    width: 100%;
+    text-align: left;
+  }
+  .left-nav-item i { font-size: 1.05rem; flex-shrink: 0; }
+  .left-nav-item:hover { background: rgba(255,255,255,.09); color: #fff; }
+  .left-nav-item.active { background: rgba(255,255,255,.16); color: #fff; font-weight: 600; }
+
+  .left-nav-actions {
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid rgba(255,255,255,.1);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .left-nav-actions .btn-primary,
+  .left-nav-actions .btn-secondary {
+    width: 100%;
+    justify-content: center;
+    font-size: .83rem;
+    padding: 9px 12px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .left-nav-actions .btn-secondary {
+    background: rgba(255,255,255,.1);
+    color: rgba(255,255,255,.85);
+    border: 1px solid rgba(255,255,255,.18);
+  }
+  .left-nav-actions .btn-secondary:hover {
+    background: rgba(255,255,255,.18);
+    color: #fff;
+  }
+
+  .left-nav-footer {
+    margin-top: auto;
+    padding-top: 14px;
+    border-top: 1px solid rgba(255,255,255,.1);
+    display: flex;
+    gap: 6px;
+  }
+  .left-nav-footer .icon-btn { color: rgba(255,255,255,.55); }
+  .left-nav-footer .icon-btn:hover { color: #fff; background: rgba(255,255,255,.1); }
+
+  /* Main content: single active panel */
   #main-content {
     flex: 1;
     min-height: 0;
-    display: grid;
-    grid-template-columns: 260px 1fr 260px;
-    grid-template-rows: 1fr;
-    padding-bottom: 0;
     overflow: hidden;
+    padding-bottom: 0;
   }
 
-  /* Force all three panels visible and scrollable */
-  #panel-cards,
-  #panel-search,
-  #panel-portals {
-    display: block !important;
+  .panel {
+    padding: 28px 36px;
     overflow-y: auto;
     height: 100%;
   }
 
-  /* Left: My Cards */
-  #panel-cards {
-    grid-column: 1;
-    grid-row: 1;
-    border-right: 1px solid var(--border);
-    padding: 20px;
-  }
-
-  /* Centre: Search */
-  #panel-search {
-    grid-column: 2;
-    grid-row: 1;
-    padding: 24px;
-  }
-
-  /* Right: My Portals */
-  #panel-portals {
-    grid-column: 3;
-    grid-row: 1;
-    border-left: 1px solid var(--border);
-    padding: 20px;
-  }
-
-  /* Hide the mobile tab bar */
+  /* Hide mobile tab bar */
   #bottom-nav { display: none !important; }
-
-  /* Header: a touch more horizontal breathing room */
-  .header-inner { padding: 0 24px; }
 }

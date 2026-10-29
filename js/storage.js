@@ -71,7 +71,7 @@ function hasPortal(portalId) {
 // ── Settings ──────────────────────────────────────────────────────────────────
 
 const DEFAULT_SETTINGS = {
-  theme:         'system',
+  theme:         'light',
   recentSearches: [],
   onboardingDone: false,
 };
