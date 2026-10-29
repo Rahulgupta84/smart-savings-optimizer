@@ -113,6 +113,17 @@ function renderSearchState() {
   const results = document.getElementById('search-results');
 
   results.setAttribute('hidden','');
+
+  // Always populate popular stores (visible in both empty and has-cards states)
+  if (qs) {
+    const popular = ['Amazon','Walmart','Target','Macy\'s','Nike','Nordstrom','Chewy','Wayfair'];
+    qs.innerHTML = popular.map(m => {
+      const cat  = MERCHANT_DB[normalizeName(m)]?.category || 'retail';
+      const icon = CATEGORY_META[cat]?.icon || 'ph ph-shopping-bag';
+      return `<button class="recent-chip" data-search="${esc(m)}"><i class="${icon}" aria-hidden="true"></i> ${esc(m)}</button>`;
+    }).join('');
+  }
+
   if (!cards.length) {
     empty.removeAttribute('hidden');
     if (initial) initial.removeAttribute('hidden');
@@ -130,16 +141,6 @@ function renderSearchState() {
       <button class="recent-chip" data-search="${esc(r)}"><i class="ph ph-clock-counter-clockwise" aria-hidden="true"></i> ${esc(r)}</button>`).join('');
   } else if (recent) {
     recent.setAttribute('hidden','');
-  }
-
-  // Quick searches
-  if (qs) {
-    const popular = ['Amazon','Walmart','Target','Macy\'s','Nike','Nordstrom','Chewy','Wayfair'];
-    qs.innerHTML = popular.map(m => {
-      const cat  = MERCHANT_DB[normalizeName(m)]?.category || 'retail';
-      const icon = CATEGORY_META[cat]?.icon || 'ph ph-shopping-bag';
-      return `<button class="recent-chip" data-search="${esc(m)}"><i class="${icon}" aria-hidden="true"></i> ${esc(m)}</button>`;
-    }).join('');
   }
 }
 
@@ -718,6 +719,8 @@ function wireEvents() {
 function init() {
   applyTheme(getSettings().theme);
   wireEvents();
+  renderCards();
+  renderPortals();
   renderSearchState();
   checkOnboarding();
 }

@@ -359,6 +359,79 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
 .empty-state h2 { font-family: var(--font-head); font-size: 1.2rem; font-weight: 700; color: var(--text); }
 .empty-state p  { color: var(--text-2); font-size: .9rem; max-width: 260px; line-height: 1.6; }
 .empty-actions  { display: flex; gap: 10px; flex-wrap: wrap; justify-content: center; margin-top: 4px; }
+.empty-actions .btn-primary { display: flex; align-items: center; gap: 6px; }
+
+/* ── Savings preview card (empty state) ────────────────────────────────────── */
+.savings-preview {
+  width: 100%;
+  max-width: 280px;
+  background: linear-gradient(145deg, #0369A1 0%, #0EA5E9 100%);
+  border-radius: var(--radius-lg);
+  padding: 18px 20px 16px;
+  text-align: left;
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 8px 32px rgba(14,165,233,.4), 0 2px 8px rgba(14,165,233,.2);
+}
+.savings-preview::before {
+  content: '';
+  position: absolute;
+  top: -50px; right: -30px;
+  width: 130px; height: 130px;
+  background: rgba(255,255,255,.08);
+  border-radius: 50%;
+  pointer-events: none;
+}
+.preview-eyebrow {
+  font-size: .68rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  color: rgba(255,255,255,.75);
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 5px;
+}
+.preview-store {
+  font-family: var(--font-head);
+  font-size: .95rem;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 12px;
+}
+.preview-stack { display: flex; flex-direction: column; gap: 6px; }
+.preview-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 10px;
+  background: rgba(255,255,255,.15);
+  border-radius: var(--radius-sm);
+  font-size: .82rem;
+  color: rgba(255,255,255,.92);
+}
+.preview-row-left { display: flex; align-items: center; gap: 7px; }
+.preview-pct { font-weight: 700; font-size: .88rem; }
+.preview-total-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 9px 10px;
+  background: rgba(255,255,255,.22);
+  border: 1px solid rgba(255,255,255,.2);
+  border-radius: var(--radius-sm);
+  font-size: .82rem;
+  font-weight: 600;
+  color: rgba(255,255,255,.92);
+  margin-top: 2px;
+}
+.preview-saved {
+  font-family: var(--font-head);
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: #fff;
+}
 
 /* ── Recent searches ───────────────────────────────────────────────────────── */
 .recent-searches { margin-top: 4px; }

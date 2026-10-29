@@ -50,11 +50,28 @@
 
         <!-- Empty state: no cards yet -->
         <div id="search-empty-state" class="empty-state">
-          <div class="empty-icon"><i class="ph ph-credit-card" aria-hidden="true"></i></div>
-          <h2>Set up your wallet</h2>
-          <p>Add your credit cards and cashback portals to get personalized savings recommendations.</p>
+          <div class="savings-preview" aria-hidden="true">
+            <div class="preview-eyebrow"><i class="ph ph-lightning-fill"></i> Example savings</div>
+            <div class="preview-store">Amazon · $150 order</div>
+            <div class="preview-stack">
+              <div class="preview-row">
+                <div class="preview-row-left"><i class="ph ph-credit-card"></i><span>Freedom Flex</span></div>
+                <span class="preview-pct">5%</span>
+              </div>
+              <div class="preview-row">
+                <div class="preview-row-left"><i class="ph ph-storefront"></i><span>Rakuten</span></div>
+                <span class="preview-pct">+8%</span>
+              </div>
+              <div class="preview-total-row">
+                <span>Total saved</span>
+                <span class="preview-saved">$19.50</span>
+              </div>
+            </div>
+          </div>
+          <h2>Stack your savings</h2>
+          <p>Add your cards once. Search any store to instantly see the best card + portal combo.</p>
           <div class="empty-actions">
-            <button class="btn-primary" data-nav="cards">Add a Card</button>
+            <button class="btn-primary" data-nav="cards"><i class="ph ph-credit-card" aria-hidden="true"></i> Add a Card</button>
             <button class="btn-secondary" data-nav="portals">Add a Portal</button>
           </div>
         </div>
