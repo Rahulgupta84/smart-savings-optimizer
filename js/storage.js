@@ -4,9 +4,10 @@
 // Settings: { theme, recentSearches }
 
 const KEYS = {
-  CARDS:    'soa_cards_v2',
-  PORTALS:  'soa_portals_v2',
-  SETTINGS: 'soa_settings_v2',
+  CARDS:      'soa_cards_v2',
+  PORTALS:    'soa_portals_v2',
+  SETTINGS:   'soa_settings_v2',
+  FAVOURITES: 'soa_favourites_v1',
 };
 
 function generateId(prefix = 'id') {
@@ -93,6 +94,28 @@ function addRecentSearch(name) {
 
 function getRecentSearches() {
   return getSettings().recentSearches || [];
+}
+
+// ── Favourites ────────────────────────────────────────────────────────────────
+
+function getFavourites() {
+  return readJSON(KEYS.FAVOURITES, []);
+}
+
+function toggleFavourite(name) {
+  if (!name) return false;
+  const favs = getFavourites();
+  const idx  = favs.indexOf(name);
+  if (idx >= 0) {
+    writeJSON(KEYS.FAVOURITES, favs.filter((_, i) => i !== idx));
+    return false;
+  }
+  writeJSON(KEYS.FAVOURITES, [name, ...favs]);
+  return true;
+}
+
+function isFavourite(name) {
+  return getFavourites().includes(name);
 }
 
 // ── Export / Import ───────────────────────────────────────────────────────────

@@ -4,7 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Savings Optimizer</title>
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🐷</text></svg>">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='90'%3E🐷%3C/text%3E%3C/svg%3E">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
@@ -23,6 +23,7 @@
         <span class="brand-name">Savings Optimizer</span>
       </div>
       <div class="header-actions">
+        <a href="index.html" class="icon-btn" title="Back to Home" aria-label="Back to Home" style="text-decoration:none;display:inline-flex;align-items:center"><i class="ph ph-house" aria-hidden="true"></i></a>
         <button id="btn-export" class="icon-btn" title="Export data" aria-label="Export data"><i class="ph ph-download-simple" aria-hidden="true"></i></button>
         <button id="btn-theme"  class="icon-btn" title="Toggle theme" aria-label="Toggle theme"><i class="ph ph-moon" aria-hidden="true"></i></button>
       </div>
@@ -60,6 +61,7 @@
       </button>
     </div>
     <div class="left-nav-footer">
+      <a href="index.html" class="icon-btn" title="Back to Home" aria-label="Back to Home" style="text-decoration:none;display:inline-flex;align-items:center"><i class="ph ph-house" aria-hidden="true"></i></a>
       <button id="btn-theme-nav" class="icon-btn" title="Toggle theme" aria-label="Toggle theme"><i class="ph ph-moon" aria-hidden="true"></i></button>
       <button id="btn-export-nav" class="icon-btn" title="Export data" aria-label="Export data"><i class="ph ph-download-simple" aria-hidden="true"></i></button>
     </div>
@@ -113,6 +115,12 @@
           </div>
         </div>
 
+        <!-- Favourite stores -->
+        <div id="fav-stores-wrap" hidden style="margin-top:12px">
+          <div class="section-label"><i class="ph-fill ph-star-fill" style="color:#F59E0B;font-size:.8em;margin-right:4px" aria-hidden="true"></i>Favourites</div>
+          <div id="fav-stores" class="recent-list fav-list"></div>
+        </div>
+
         <!-- Quick searches (shown after cards are added) -->
         <div id="recent-searches" class="recent-searches" hidden>
           <div class="section-label">Recent</div>
@@ -131,6 +139,7 @@
         <div class="results-merchant">
           <span id="results-merchant-name" class="results-merchant-name"></span>
           <span id="results-category-badge" class="category-badge"></span>
+          <button id="btn-fav-store" class="icon-btn fav-store-btn" title="Add to favourites" aria-label="Add to favourites"><i class="ph ph-star" aria-hidden="true"></i></button>
         </div>
         <div id="best-combo"></div>
         <div id="other-combos"></div>

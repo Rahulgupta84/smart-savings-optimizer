@@ -139,6 +139,23 @@ function renderSearchState() {
   empty.setAttribute('hidden','');
   if (initial) initial.removeAttribute('hidden');
 
+  // Favourite stores
+  const favWrap = document.getElementById('fav-stores-wrap');
+  const favList = document.getElementById('fav-stores');
+  if (favWrap && favList) {
+    const favs = getFavourites();
+    if (favs.length) {
+      favWrap.removeAttribute('hidden');
+      favList.innerHTML = favs.map(f => `
+        <span class="fav-item">
+          <button class="recent-chip" data-search="${esc(f)}"><i class="ph-fill ph-star-fill" style="color:#F59E0B" aria-hidden="true"></i> ${esc(f)}</button>
+          <button class="fav-remove-btn" data-fav-remove="${esc(f)}" title="Remove" aria-label="Remove ${esc(f)} from favourites"><i class="ph ph-x" aria-hidden="true"></i></button>
+        </span>`).join('');
+    } else {
+      favWrap.setAttribute('hidden','');
+    }
+  }
+
   // Recent searches
   const recents = getRecentSearches();
   if (recents.length && recent) {
@@ -204,9 +221,19 @@ function renderResults(result) {
   const { merchant, recommendations, unusedBest } = result;
   const catMeta = CATEGORY_META[merchant.category] || CATEGORY_META.default;
 
-  document.getElementById('results-merchant-name').textContent = merchant.displayName || state.lastQuery;
+  const displayName = merchant.displayName || state.lastQuery;
+  document.getElementById('results-merchant-name').textContent = displayName;
   document.getElementById('results-category-badge').innerHTML =
     `<i class="${catMeta.icon}" aria-hidden="true"></i> ${esc(CATEGORIES[merchant.category] || merchant.category)}`;
+
+  const favBtn = document.getElementById('btn-fav-store');
+  if (favBtn) {
+    const starred = isFavourite(displayName);
+    favBtn.innerHTML = `<i class="${starred ? 'ph-fill ph-star-fill' : 'ph ph-star'}" style="${starred ? 'color:#F59E0B' : ''}" aria-hidden="true"></i>`;
+    favBtn.title     = starred ? 'Remove from favourites' : 'Add to favourites';
+    favBtn.setAttribute('aria-label', starred ? 'Remove from favourites' : 'Add to favourites');
+    favBtn.dataset.favStoreName = displayName;
+  }
 
   if (!recommendations.length) {
     document.getElementById('best-combo').innerHTML = `
@@ -622,6 +649,28 @@ function wireEvents() {
   // Click outside autocomplete
   document.addEventListener('click', e => {
     if (!e.target.closest('.search-wrap')) closeAutocomplete();
+  });
+
+  // Favourite store toggle (in results header)
+  document.getElementById('btn-fav-store').addEventListener('click', () => {
+    const name = document.getElementById('btn-fav-store').dataset.favStoreName;
+    if (!name) return;
+    const isNowFav = toggleFavourite(name);
+    const favBtn = document.getElementById('btn-fav-store');
+    favBtn.innerHTML = `<i class="${isNowFav ? 'ph-fill ph-star-fill' : 'ph ph-star'}" style="${isNowFav ? 'color:#F59E0B' : ''}" aria-hidden="true"></i>`;
+    favBtn.title     = isNowFav ? 'Remove from favourites' : 'Add to favourites';
+    favBtn.setAttribute('aria-label', isNowFav ? 'Remove from favourites' : 'Add to favourites');
+    showToast(isNowFav ? `${name} added to favourites` : `${name} removed from favourites`);
+  });
+
+  // Favourite chip remove (delegated, must come before chip handler)
+  document.addEventListener('click', e => {
+    const removeBtn = e.target.closest('[data-fav-remove]');
+    if (removeBtn) {
+      toggleFavourite(removeBtn.dataset.favRemove);
+      renderSearchState();
+      showToast(`${removeBtn.dataset.favRemove} removed from favourites`);
+    }
   });
 
   // Recent / quick search chips (delegated)
