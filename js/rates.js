@@ -93,11 +93,8 @@ async function loadLiveRates() {
         const cellStr = cell ? String(cell.f || cell.v || '') : '';
         const rate    = _parseRate(cellStr);
 
-        if (PORTAL_DB[portalId].rates[storeKey] !== undefined) {
-          PORTAL_DB[portalId].rates[storeKey].rate        = rate;
-          PORTAL_DB[portalId].rates[storeKey].lastChecked = fileDate;
-          updated++;
-        }
+        PORTAL_DB[portalId].rates[storeKey] = { rate, lastChecked: fileDate };
+        updated++;
       }
     }
 
