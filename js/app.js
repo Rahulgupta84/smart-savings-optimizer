@@ -9,6 +9,8 @@ const state = {
   lastCategory: null,
   selectedCardIds: new Set(),
   selectedPortalIds: new Set(),
+  lastResult: null,
+  wholesaleTier: 'member',
 };
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
@@ -227,6 +229,7 @@ function runSearch(query) {
 }
 
 function renderResults(result) {
+  state.lastResult = result;
   const { merchant, recommendations, unusedBest } = result;
   const catMeta = CATEGORY_META[merchant.category] || CATEGORY_META.default;
 
@@ -234,6 +237,18 @@ function renderResults(result) {
   document.getElementById('results-merchant-name').textContent = displayName;
   document.getElementById('results-category-badge').innerHTML =
     `<i class="${catMeta.icon}" aria-hidden="true"></i> ${esc(CATEGORIES[merchant.category] || merchant.category)}`;
+
+  // Wholesale tier toggle
+  const tierToggle = document.getElementById('results-tier-toggle');
+  if (merchant.category === 'wholesale') {
+    tierToggle.removeAttribute('hidden');
+    tierToggle.innerHTML =
+      `<button class="tier-btn${state.wholesaleTier === 'member' ? ' active' : ''}" data-tier="member">Member</button>` +
+      `<button class="tier-btn${state.wholesaleTier === 'executive' ? ' active' : ''}" data-tier="executive">Executive</button>`;
+  } else {
+    tierToggle.setAttribute('hidden', '');
+    state.wholesaleTier = 'member';
+  }
 
   const favBtn = document.getElementById('btn-fav-store');
   if (favBtn) {
@@ -257,7 +272,12 @@ function renderResults(result) {
     return;
   }
 
-  const [best, ...rest] = recommendations;
+  const execBonus = (merchant.category === 'wholesale' && state.wholesaleTier === 'executive') ? 2 : 0;
+  const adjRecs = execBonus
+    ? recommendations.map(c => ({ ...c, total: +(c.total + execBonus).toFixed(2) }))
+    : recommendations;
+
+  const [best, ...rest] = adjRecs;
   document.getElementById('best-combo').innerHTML = buildBestComboCard(best, merchant);
 
   document.getElementById('other-combos').innerHTML = rest.length
@@ -270,11 +290,15 @@ function renderResults(result) {
   if (wholesaleBanner) {
     if (merchant.category === 'wholesale') {
       wholesaleBanner.removeAttribute('hidden');
-      wholesaleBanner.innerHTML = `
-        <div class="wholesale-banner">
-          <i class="ph ph-info" aria-hidden="true"></i>
-          <span>Rates shown are card cashback only. Executive / Plus membership tiers earn additional rewards — your effective savings could be higher.</span>
-        </div>`;
+      wholesaleBanner.innerHTML = state.wholesaleTier === 'executive'
+        ? `<div class="wholesale-banner wholesale-banner--active">
+             <i class="ph ph-check-circle" aria-hidden="true"></i>
+             <span>+2% Executive membership reward included in all totals above.</span>
+           </div>`
+        : `<div class="wholesale-banner">
+             <i class="ph ph-info" aria-hidden="true"></i>
+             <span>Rates shown are card cashback only. Select <strong>Executive</strong> above to include the +2% membership reward.</span>
+           </div>`;
     } else {
       wholesaleBanner.setAttribute('hidden', '');
     }
@@ -852,6 +876,14 @@ function wireEvents() {
   document.getElementById('close-portal-selector').addEventListener('click', () => closeModal('modal-portal-selector'));
   document.getElementById('modal-portal-selector').addEventListener('click', e => {
     if (e.target.id === 'modal-portal-selector') closeModal('modal-portal-selector');
+  });
+
+  // Wholesale tier toggle
+  document.getElementById('results-tier-toggle').addEventListener('click', e => {
+    const btn = e.target.closest('.tier-btn');
+    if (!btn || !state.lastResult) return;
+    state.wholesaleTier = btn.dataset.tier;
+    renderResults(state.lastResult);
   });
 
   // Category override
