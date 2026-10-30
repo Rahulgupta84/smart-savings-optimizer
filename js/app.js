@@ -225,7 +225,7 @@ function runSearch(query) {
   // Async: fetch bank offer hints (non-blocking; section hidden until results arrive)
   document.getElementById('bank-offers').setAttribute('hidden','');
   const displayName = result.merchant.displayName || query;
-  getBankOffers(displayName, cards).then(offers => renderBankOffers(offers, displayName));
+  getBankOffers(displayName, cards, result.merchant.isKnown).then(offers => renderBankOffers(offers, displayName));
 }
 
 function renderResults(result) {
