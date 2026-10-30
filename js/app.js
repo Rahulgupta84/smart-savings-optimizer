@@ -215,6 +215,11 @@ function runSearch(query) {
 
   document.getElementById('search-initial').setAttribute('hidden','');
   document.getElementById('search-results').removeAttribute('hidden');
+
+  // Async: fetch bank offer hints (non-blocking; section hidden until results arrive)
+  document.getElementById('bank-offers').setAttribute('hidden','');
+  const displayName = result.merchant.displayName || query;
+  getBankOffers(displayName, cards).then(offers => renderBankOffers(offers, displayName));
 }
 
 function renderResults(result) {
@@ -283,6 +288,41 @@ function renderResults(result) {
   } else {
     overrideEl.setAttribute('hidden','');
   }
+}
+
+function renderBankOffers(offers, merchantName) {
+  const el = document.getElementById('bank-offers');
+  if (!el || !offers.length) { if (el) el.setAttribute('hidden',''); return; }
+
+  el.removeAttribute('hidden');
+  el.innerHTML = `
+    <div class="bank-offers-wrap">
+      <div class="bank-offers-header">
+        <i class="ph ph-tag" aria-hidden="true"></i>
+        <span>Bank Offers at ${esc(merchantName)}</span>
+        <span class="bank-offers-badge">Save more</span>
+      </div>
+      <div class="bank-offers-list">
+        ${offers.map(o => {
+          const link    = BANK_OFFER_LINKS[o.bank] || '#';
+          const expiry  = o.expiresAt ? `Expires ${fmtDate(o.expiresAt)}` : '';
+          const addedOn = o.addedAt   ? `Spotted ${fmtDate(o.addedAt)}`   : '';
+          return `
+            <div class="bank-offer-row">
+              <div class="bank-offer-left">
+                <div class="bank-offer-bank">${esc(o.bank)}</div>
+                <div class="bank-offer-title">${esc(o.title)}</div>
+                ${expiry  ? `<div class="bank-offer-meta"><i class="ph ph-clock" aria-hidden="true"></i> ${expiry}</div>` : ''}
+                ${addedOn && !expiry ? `<div class="bank-offer-meta">${addedOn}</div>` : ''}
+              </div>
+              <a href="${esc(link)}" target="_blank" rel="noopener noreferrer" class="btn-secondary btn-sm bank-offer-link">
+                Check ${esc(o.bank)} Offers <i class="ph ph-arrow-square-out" aria-hidden="true"></i>
+              </a>
+            </div>`;
+        }).join('')}
+      </div>
+      <p class="bank-offers-note"><i class="ph ph-info" aria-hidden="true"></i> These offers may be targeted — check your account to confirm you have them before buying.</p>
+    </div>`;
 }
 
 function buildBestComboCard(combo, merchant) {
@@ -624,6 +664,17 @@ function wireEvents() {
   document.getElementById('btn-add-portal-nav')?.addEventListener('click', openPortalSelector);
   document.getElementById('btn-theme-nav')?.addEventListener('click', toggleTheme);
   document.getElementById('btn-export-nav')?.addEventListener('click', handleExport);
+
+  // API key for bank offers
+  const apiKeyInput = document.getElementById('api-key-input');
+  if (apiKeyInput) {
+    try { apiKeyInput.value = localStorage.getItem('soa_bank_key') || ''; } catch {}
+    document.getElementById('btn-save-api-key')?.addEventListener('click', () => {
+      const val = apiKeyInput.value.trim();
+      try { if (val) localStorage.setItem('soa_bank_key', val); else localStorage.removeItem('soa_bank_key'); } catch {}
+      showToast(val ? 'API key saved' : 'API key cleared');
+    });
+  }
 
   // Bottom nav (mobile)
   document.querySelectorAll('.nav-item[data-panel]').forEach(btn =>
