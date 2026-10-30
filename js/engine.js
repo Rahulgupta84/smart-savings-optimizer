@@ -56,10 +56,14 @@ function getEffectiveCardRate(userCard, merchantInfo) {
   // Check user-chosen category (BofA Custom, PayPal Debit)
   if (!isBonusActive && template.chosenCategories && userCard.chosenCategory) {
     const chosen = template.chosenCategories.find(c => c.key === userCard.chosenCategory);
-    if (chosen && chosen.category === category && template.chosenRate > baseRate) {
-      baseRate      = template.chosenRate;
-      bonusLabel    = chosen.label;
-      isBonusActive = true;
+    if (chosen && template.chosenRate > baseRate) {
+      const catMatch = chosen.category === category ||
+        (chosen.aliasCategories && chosen.aliasCategories.includes(category));
+      if (catMatch) {
+        baseRate      = template.chosenRate;
+        bonusLabel    = chosen.label;
+        isBonusActive = true;
+      }
     }
   }
 
@@ -78,7 +82,7 @@ function getEffectiveCardRate(userCard, merchantInfo) {
     cashbackEquiv: +cashbackEquiv.toFixed(2),
     isBonusActive,
     bonusLabel,
-    bonusNote:    isBonusActive ? bonus.note : null,
+    bonusNote:    isBonusActive && bonus ? bonus.note : null,
   };
 }
 
