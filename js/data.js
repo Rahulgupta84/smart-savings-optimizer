@@ -267,6 +267,27 @@ const CARD_TEMPLATES = [
     currentBonus: null,
     note: 'Auto-applies 5% to your top spending category each billing cycle · $500/mo cap',
   },
+  {
+    id: 'citi-costco',
+    name: 'Costco Anywhere Visa by Citi',
+    issuer: 'Citi',
+    color: '#005DAA',
+    textColor: '#FFFFFF',
+    rewardType: 'cashback',
+    pointValue: 0.01,
+    tagline: '4% gas, 3% dining & travel, 2% Costco, 1% other',
+    highlight: '4% gas · 3% dining & travel · 2% Costco',
+    annualFee: 0,
+    rewards: {
+      gas:      4,
+      dining:   3,
+      travel:   3,
+      wholesale: 2,
+      default:  1,
+    },
+    currentBonus: null,
+    note: 'Requires Costco membership. 4% gas capped at $7,000/yr then 1%.',
+  },
   // ── American Express ───────────────────────────────────────────────────────
   {
     id: 'amex-gold',
