@@ -126,7 +126,7 @@ function getPortalRatesForMerchant(userPortals, merchantInfo) {
 
 // ─── Best Unused Cards (Save More suggestions) ───────────────────────────────
 
-function getBestUnusedCards(userCards, merchantInfo, userBestRate) {
+function getBestUnusedCards(userCards, merchantInfo, userBestRate, bestPortalRate) {
   const addedIds = new Set(userCards.map(c => c.templateId));
   const category = merchantInfo.category;
   const norm     = merchantInfo.normalizedInput;
@@ -153,8 +153,11 @@ function getBestUnusedCards(userCards, merchantInfo, userBestRate) {
       ? rate * (template.pointValue || 0.01) * 100
       : rate;
 
-    if (cashbackEquiv > userBestRate) {
-      results.push({ template, cashbackEquiv: +cashbackEquiv.toFixed(2), bonusLabel });
+    // Stack the user's best portal so the comparison (and display) reflects the real total
+    const totalEquiv = +(cashbackEquiv + bestPortalRate).toFixed(2);
+
+    if (totalEquiv > userBestRate) {
+      results.push({ template, cashbackEquiv: totalEquiv, bonusLabel, portalRate: bestPortalRate });
     }
   }
 
@@ -225,9 +228,10 @@ function getRecommendations(merchantInput, userCards, userPortals) {
     return true;
   });
 
-  const unusedBest  = getBestUnusedPortalRate(userPortals, merchantInfo);
-  const userBestRate = unique.length > 0 ? unique[0].total : 0;
-  const saveMore    = getBestUnusedCards(userCards, merchantInfo, userBestRate);
+  const unusedBest    = getBestUnusedPortalRate(userPortals, merchantInfo);
+  const userBestRate  = unique.length > 0 ? unique[0].total : 0;
+  const bestPortalRate = portalResults.length > 0 ? portalResults[0].rate : 0;
+  const saveMore      = getBestUnusedCards(userCards, merchantInfo, userBestRate, bestPortalRate);
 
   return {
     merchant:      merchantInfo,

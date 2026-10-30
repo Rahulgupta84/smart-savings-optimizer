@@ -281,11 +281,12 @@ function renderResults(result) {
       saveMoreEl.removeAttribute('hidden');
       const chips = saveMore.map(s => {
         const adjRate = +(s.cashbackEquiv + execBonus).toFixed(2);
-        const bonus = s.bonusLabel ? `<span class="save-more-bonus">${esc(s.bonusLabel)}</span>` : '';
+        const bonus   = s.bonusLabel ? `<span class="save-more-bonus">${esc(s.bonusLabel)}</span>` : '';
         const execTag = execBonus ? `<span class="save-more-bonus" style="margin-left:2px">+${execBonus}% Executive</span>` : '';
+        const portalTag = s.portalRate ? `<span class="save-more-bonus" style="margin-left:2px">+${s.portalRate}% portal</span>` : '';
         return `<div class="save-more-chip">
           <span class="save-more-chip-name">${esc(s.template.name)}</span>
-          ${bonus}${execTag}
+          ${bonus}${portalTag}${execTag}
           <span class="save-more-chip-rate">${fmt(adjRate)}</span>
         </div>`;
       }).join('');
