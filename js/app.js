@@ -739,6 +739,7 @@ function updateNavCounts() {
 
 function init() {
   applyTheme(getSettings().theme);
+  loadLiveRates();           // fetch sheet rates; falls back silently if unavailable
   wireEvents();
   renderCards();
   renderPortals();
