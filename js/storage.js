@@ -43,6 +43,10 @@ function removeCard(id) {
   writeJSON(KEYS.CARDS, getCards().filter(c => c.id !== id));
 }
 
+function updateCardCategory(cardId, categoryKey) {
+  writeJSON(KEYS.CARDS, getCards().map(c => c.id === cardId ? { ...c, chosenCategory: categoryKey } : c));
+}
+
 function hasCard(templateId) {
   return getCards().some(c => c.templateId === templateId);
 }

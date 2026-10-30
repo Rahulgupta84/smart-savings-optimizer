@@ -863,6 +863,36 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
 }
 .card-tile-sub { font-size: .78rem; color: var(--text-2); margin-top: 2px; }
 .card-tile-actions { display: flex; gap: 4px; }
+.card-tile-category {
+  font-size: .72rem;
+  color: var(--primary);
+  font-weight: 600;
+  margin-top: 3px;
+}
+
+/* ── Category picker modal ─────────────────────────────────────────────────── */
+.cat-picker-desc {
+  font-size: .85rem;
+  color: var(--text-2);
+  margin: 0 0 12px;
+  line-height: 1.4;
+}
+.cat-picker-list { display: flex; flex-direction: column; gap: 8px; }
+.cat-picker-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius);
+  border: 2px solid var(--border);
+  cursor: pointer;
+  transition: border-color .15s, background .15s;
+  font-size: .9rem;
+  font-weight: 500;
+}
+.cat-picker-item:hover  { border-color: var(--primary); background: var(--surface-2); }
+.cat-picker-item.active { border-color: var(--primary); background: color-mix(in srgb, var(--primary) 10%, transparent); }
+.cat-picker-item i      { font-size: 1.1rem; color: var(--primary); }
 
 /* ── Portal tiles ──────────────────────────────────────────────────────────── */
 .portals-list { display: flex; flex-direction: column; gap: 10px; }

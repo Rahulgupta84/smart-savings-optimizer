@@ -418,14 +418,21 @@ function renderCards() {
   list.innerHTML = cards.map(uc => {
     const tmpl = CARD_TEMPLATES.find(t => t.id === uc.templateId);
     if (!tmpl) return '';
+    const hasChosen = !!tmpl.chosenCategories;
+    const chosenLabel = hasChosen && uc.chosenCategory
+      ? tmpl.chosenCategories.find(c => c.key === uc.chosenCategory)?.label
+      : null;
     return `
       <div class="card-tile">
         <div class="card-chip" style="background:${esc(tmpl.color)}">${esc(tmpl.issuer.substring(0,3).toUpperCase())}</div>
         <div class="card-tile-info">
           <div class="card-tile-name">${esc(tmpl.name)}</div>
           <div class="card-tile-sub">${esc(tmpl.tagline)}</div>
+          ${chosenLabel ? `<div class="card-tile-category"><i class="ph ph-tag" aria-hidden="true"></i> ${esc(tmpl.chosenRate)}% on ${esc(chosenLabel)}</div>` : ''}
+          ${hasChosen && !chosenLabel ? `<div class="card-tile-category" style="color:var(--warning, #F59E0B)"><i class="ph ph-warning" aria-hidden="true"></i> Select your ${tmpl.chosenRate}% category</div>` : ''}
         </div>
         <div class="card-tile-actions">
+          ${hasChosen ? `<button class="btn-ghost" style="font-size:.8rem;padding:6px 10px" data-choose-category="${esc(uc.id)}" title="Change category" aria-label="Change category"><i class="ph ph-pencil" aria-hidden="true"></i></button>` : ''}
           <button class="btn-ghost" style="color:var(--danger);font-size:.8rem;padding:6px 10px" data-remove-card="${esc(uc.id)}" title="Remove" aria-label="Remove card"><i class="ph ph-x" aria-hidden="true"></i></button>
         </div>
       </div>`;
@@ -519,15 +526,45 @@ function syncCardPickerFooter() {
 }
 
 function confirmAddCards() {
-  let added = 0;
-  state.selectedCardIds.forEach(id => { if (addCard(id)) added++; });
+  const addedCards = [];
+  state.selectedCardIds.forEach(id => {
+    const card = addCard(id);
+    if (card) addedCards.push(card);
+  });
   closeModal('modal-card-picker');
   updateNavCounts();
-  if (added > 0) {
+  if (addedCards.length > 0) {
     renderCards();
     renderSearchState();
-    showToast(`Added ${added} card${added > 1 ? 's' : ''}`, 'success');
+    showToast(`Added ${addedCards.length} card${addedCards.length > 1 ? 's' : ''}`, 'success');
+    // Prompt for category on cards that need it
+    const needsCat = addedCards.find(c => CARD_TEMPLATES.find(t => t.id === c.templateId)?.chosenCategories);
+    if (needsCat) openCategoryPicker(needsCat.id);
   }
+}
+
+function openCategoryPicker(cardId) {
+  const card = getCards().find(c => c.id === cardId);
+  if (!card) return;
+  const tmpl = CARD_TEMPLATES.find(t => t.id === card.templateId);
+  if (!tmpl?.chosenCategories) return;
+
+  const isMonthly = tmpl.id === 'paypal-debit';
+  document.getElementById('cat-picker-title').textContent =
+    `${tmpl.name}: ${tmpl.chosenRate}% Category`;
+  document.getElementById('cat-picker-desc').textContent =
+    isMonthly
+      ? `Which category did you activate this month? Update it each month.`
+      : `Which category did you choose for your 3% bonus? (Set once at BoA's website.)`;
+
+  const catIcons = { dining:'fork-knife', gas:'gas-pump', grocery:'storefront', drugstore:'first-aid', retail:'shopping-bag', home:'house', travel:'airplane', default:'tag' };
+  document.getElementById('cat-picker-list').innerHTML = tmpl.chosenCategories.map(c => `
+    <button class="cat-picker-item${card.chosenCategory === c.key ? ' active' : ''}" data-cat-key="${esc(c.key)}" data-card-id="${esc(cardId)}">
+      <i class="ph ph-${catIcons[c.category] || catIcons.default}" aria-hidden="true"></i>
+      ${esc(c.label)}
+    </button>`).join('');
+
+  document.getElementById('modal-category-picker').removeAttribute('hidden');
 }
 
 // ─── Portal Selector Modal ────────────────────────────────────────────────────
@@ -732,9 +769,26 @@ function wireEvents() {
   document.getElementById('btn-add-card').addEventListener('click', openCardPicker);
   document.getElementById('btn-add-card-empty').addEventListener('click', openCardPicker);
   document.getElementById('cards-list').addEventListener('click', e => {
-    const btn = e.target.closest('[data-remove-card]');
-    if (btn) { removeCard(btn.dataset.removeCard); renderCards(); updateNavCounts(); renderSearchState(); showToast('Card removed'); }
+    const removeBtn = e.target.closest('[data-remove-card]');
+    if (removeBtn) { removeCard(removeBtn.dataset.removeCard); renderCards(); updateNavCounts(); renderSearchState(); showToast('Card removed'); return; }
+    const catBtn = e.target.closest('[data-choose-category]');
+    if (catBtn) openCategoryPicker(catBtn.dataset.chooseCategory);
   });
+
+  // Category picker
+  document.getElementById('modal-category-picker').addEventListener('click', e => {
+    const item = e.target.closest('[data-cat-key]');
+    if (item) {
+      updateCardCategory(item.dataset.cardId, item.dataset.catKey);
+      document.getElementById('modal-category-picker').setAttribute('hidden','');
+      renderCards();
+      renderSearchState();
+      showToast('Category saved', 'success');
+    }
+    if (e.target.id === 'modal-category-picker') document.getElementById('modal-category-picker').setAttribute('hidden','');
+  });
+  document.getElementById('close-cat-picker').addEventListener('click', () =>
+    document.getElementById('modal-category-picker').setAttribute('hidden',''));
 
   // Portals panel
   document.getElementById('btn-add-portal').addEventListener('click', openPortalSelector);

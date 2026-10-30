@@ -53,6 +53,16 @@ function getEffectiveCardRate(userCard, merchantInfo) {
     }
   }
 
+  // Check user-chosen category (BofA Custom, PayPal Debit)
+  if (!isBonusActive && template.chosenCategories && userCard.chosenCategory) {
+    const chosen = template.chosenCategories.find(c => c.key === userCard.chosenCategory);
+    if (chosen && chosen.category === category && template.chosenRate > baseRate) {
+      baseRate      = template.chosenRate;
+      bonusLabel    = chosen.label;
+      isBonusActive = true;
+    }
+  }
+
   // Convert points to cashback-equivalent
   let cashbackEquiv;
   if (template.rewardType === 'points' || template.rewardType === 'miles') {
