@@ -705,6 +705,27 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
 [data-theme="light"] .upsell-title { color: var(--success); }
 .upsell-body  { font-size: .8rem; color: var(--text-2); margin-top: 2px; line-height: 1.5; }
 
+/* Wholesale membership banner */
+.wholesale-banner {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  background: color-mix(in srgb, var(--primary) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
+  border-radius: var(--radius);
+  padding: 10px 14px;
+  margin-top: 12px;
+  font-size: .8rem;
+  color: var(--text-2);
+  line-height: 1.5;
+}
+.wholesale-banner i {
+  flex-shrink: 0;
+  margin-top: 2px;
+  font-size: 1rem;
+  color: var(--primary);
+}
+
 /* Bank offer hints */
 .bank-offers-wrap {
   margin-top: 12px;

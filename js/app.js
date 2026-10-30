@@ -265,6 +265,21 @@ function renderResults(result) {
        <div class="combos-list">${rest.map((c, i) => buildComboRow(c, i + 2)).join('')}</div>`
     : '';
 
+  // Wholesale membership banner
+  const wholesaleBanner = document.getElementById('wholesale-banner');
+  if (wholesaleBanner) {
+    if (merchant.category === 'wholesale') {
+      wholesaleBanner.removeAttribute('hidden');
+      wholesaleBanner.innerHTML = `
+        <div class="wholesale-banner">
+          <i class="ph ph-info" aria-hidden="true"></i>
+          <span>Rates shown are card cashback only. Executive / Plus membership tiers earn additional rewards — your effective savings could be higher.</span>
+        </div>`;
+    } else {
+      wholesaleBanner.setAttribute('hidden', '');
+    }
+  }
+
   // Upsell if an unused portal has a better rate
   const tip = document.getElementById('tip-banner');
   if (unusedBest && unusedBest.rate > 0) {
