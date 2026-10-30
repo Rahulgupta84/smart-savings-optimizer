@@ -363,6 +363,23 @@ const CARD_TEMPLATES = [
     },
     currentBonus: null,
   },
+  // ── PayPal ─────────────────────────────────────────────────────────────────
+  {
+    id: 'paypal-cashback',
+    name: 'PayPal Cashback Mastercard',
+    issuer: 'PayPal',
+    color: '#003087',
+    textColor: '#FFFFFF',
+    rewardType: 'cashback',
+    pointValue: 0.01,
+    tagline: '3% on PayPal, 1.5% everywhere else',
+    highlight: '3% PayPal · 1.5% everywhere · no fee',
+    annualFee: 0,
+    rewards: {
+      default: 1.5,
+    },
+    currentBonus: null,
+  },
   // ── Wells Fargo ────────────────────────────────────────────────────────────
   {
     id: 'wf-active',
