@@ -1307,36 +1307,7 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
     color: #fff;
   }
 
-  .left-nav-api-key {
-    padding: 12px 0 10px;
-    border-top: 1px solid rgba(255,255,255,.1);
-  }
-  .api-key-label {
-    display: flex;
-    align-items: center;
-    gap: 5px;
-    font-size: .7rem;
-    font-weight: 600;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    color: rgba(255,255,255,.45);
-    margin-bottom: 6px;
-  }
-  .api-key-row { display: flex; gap: 6px; }
-  .api-key-input {
-    flex: 1;
-    min-width: 0;
-    background: rgba(255,255,255,.07);
-    border: 1px solid rgba(255,255,255,.12);
-    border-radius: var(--radius-sm, 6px);
-    color: rgba(255,255,255,.8);
-    font-size: .78rem;
-    padding: 5px 8px;
-    outline: none;
-  }
-  .api-key-input::placeholder { color: rgba(255,255,255,.25); }
-  .api-key-input:focus { border-color: var(--primary); }
-  .left-nav-footer {
+.left-nav-footer {
     margin-top: 10px;
     padding-top: 12px;
     border-top: 1px solid rgba(255,255,255,.1);

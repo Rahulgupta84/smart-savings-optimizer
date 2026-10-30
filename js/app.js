@@ -665,16 +665,6 @@ function wireEvents() {
   document.getElementById('btn-theme-nav')?.addEventListener('click', toggleTheme);
   document.getElementById('btn-export-nav')?.addEventListener('click', handleExport);
 
-  // API key for bank offers
-  const apiKeyInput = document.getElementById('api-key-input');
-  if (apiKeyInput) {
-    try { apiKeyInput.value = localStorage.getItem('soa_bank_key') || ''; } catch {}
-    document.getElementById('btn-save-api-key')?.addEventListener('click', () => {
-      const val = apiKeyInput.value.trim();
-      try { if (val) localStorage.setItem('soa_bank_key', val); else localStorage.removeItem('soa_bank_key'); } catch {}
-      showToast(val ? 'API key saved' : 'API key cleared');
-    });
-  }
 
   // Bottom nav (mobile)
   document.querySelectorAll('.nav-item[data-panel]').forEach(btn =>
