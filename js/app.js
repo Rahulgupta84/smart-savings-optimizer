@@ -272,17 +272,21 @@ function renderResults(result) {
     return;
   }
 
+  const execBonus = (merchant.category === 'wholesale' && state.wholesaleTier === 'executive') ? 2 : 0;
+
   // Save More — cards the user doesn't have that would beat their current best
   const saveMoreEl = document.getElementById('save-more-banner');
   if (saveMoreEl) {
     if (saveMore && saveMore.length) {
       saveMoreEl.removeAttribute('hidden');
       const chips = saveMore.map(s => {
+        const adjRate = +(s.cashbackEquiv + execBonus).toFixed(2);
         const bonus = s.bonusLabel ? `<span class="save-more-bonus">${esc(s.bonusLabel)}</span>` : '';
+        const execTag = execBonus ? `<span class="save-more-bonus" style="margin-left:2px">+${execBonus}% Executive</span>` : '';
         return `<div class="save-more-chip">
           <span class="save-more-chip-name">${esc(s.template.name)}</span>
-          ${bonus}
-          <span class="save-more-chip-rate">${fmt(s.cashbackEquiv)}</span>
+          ${bonus}${execTag}
+          <span class="save-more-chip-rate">${fmt(adjRate)}</span>
         </div>`;
       }).join('');
       saveMoreEl.innerHTML = `
@@ -297,8 +301,6 @@ function renderResults(result) {
       saveMoreEl.setAttribute('hidden', '');
     }
   }
-
-  const execBonus = (merchant.category === 'wholesale' && state.wholesaleTier === 'executive') ? 2 : 0;
   const adjRecs = execBonus
     ? recommendations.map(c => ({ ...c, total: +(c.total + execBonus).toFixed(2) }))
     : recommendations;
