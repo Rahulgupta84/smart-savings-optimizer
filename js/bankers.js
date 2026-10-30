@@ -12,7 +12,7 @@ function _bankKey() {
   try { return localStorage.getItem('soa_bank_key') || ''; } catch { return ''; }
 }
 
-// Maps offer.love bank names → CARD_DB issuer strings
+// Maps offer.love bank names → CARD_TEMPLATES issuer strings
 const BANK_TO_ISSUER = {
   'Chase':       'Chase',
   'Amex':        'American Express',
@@ -38,7 +38,7 @@ async function getBankOffers(merchantName, userCards) {
 
     // Collect issuers from the user's saved card templates
     const userIssuers = new Set(
-      userCards.map(c => CARD_DB[c.templateId]?.issuer).filter(Boolean)
+      userCards.map(c => CARD_TEMPLATES.find(t => t.id === c.templateId)?.issuer).filter(Boolean)
     );
     if (!userIssuers.size) return [];
 
