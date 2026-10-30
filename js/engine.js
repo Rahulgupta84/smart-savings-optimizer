@@ -167,7 +167,17 @@ function getRecommendations(merchantInput, userCards, userPortals) {
 
   combos.sort((a, b) => {
     if (b.total !== a.total) return b.total - a.total;
-    return (b.portal ? 1 : 0) - (a.portal ? 1 : 0);
+    // Prefer portal combo
+    const portalDiff = (b.portal ? 1 : 0) - (a.portal ? 1 : 0);
+    if (portalDiff !== 0) return portalDiff;
+    // Prefer lower annual fee
+    const feeA = a.card.template.annualFee || 0;
+    const feeB = b.card.template.annualFee || 0;
+    if (feeA !== feeB) return feeA - feeB;
+    // Prefer more specialized card (higher max single-category rate wins)
+    const maxA = Math.max(...Object.values(a.card.template.rewards || { default: 1 }));
+    const maxB = Math.max(...Object.values(b.card.template.rewards || { default: 1 }));
+    return maxB - maxA;
   });
 
   const seen   = new Set();

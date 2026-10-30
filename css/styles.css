@@ -296,19 +296,21 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
 }
 #search-input::placeholder { color: var(--text-3); }
 .clear-btn {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   display: flex;
   align-items: center;
   justify-content: center;
   border-radius: 50%;
-  background: var(--surface-2);
-  color: var(--text-2);
-  font-size: .8rem;
+  background: var(--text-3);
+  color: var(--surface);
+  font-size: .85rem;
   flex-shrink: 0;
-  transition: background .15s;
+  transition: background .15s, opacity .15s;
+  opacity: 0.7;
+  margin-right: 2px;
 }
-.clear-btn:hover { background: var(--text-3); color: #fff; }
+.clear-btn:hover { background: var(--text-2); opacity: 1; }
 
 /* Autocomplete */
 .autocomplete-dropdown {
