@@ -746,7 +746,8 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   border: 1px solid color-mix(in srgb, var(--primary) 30%, transparent);
   border-radius: var(--radius);
   padding: 10px 14px;
-  margin-top: 12px;
+  margin-top: 8px;
+  margin-bottom: 4px;
   font-size: .8rem;
   color: var(--text-2);
   line-height: 1.5;
