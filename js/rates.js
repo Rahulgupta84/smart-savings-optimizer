@@ -2,7 +2,7 @@
 // After deploying the Google Apps Script (Code.gs), paste your web app URL below.
 // Leave it empty to use only the hardcoded rates in data.js.
 
-const LIVE_RATES_URL = '';  // ← paste your Apps Script URL here
+const LIVE_RATES_URL = 'https://script.google.com/macros/s/AKfycbxZxe8GL_kPpLKnEa8B8F_kYSEAk3AeXVMXT7oN-UcgRid6Xh1UxnD_H7kI1Ifc9XtK/exec';
 
 // Maps sheet portal keys (lowercase, no spaces) → PORTAL_DB keys
 const PORTAL_KEY_MAP = {
