@@ -1148,6 +1148,18 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   .left-nav-item i { font-size: 1.05rem; flex-shrink: 0; }
   .left-nav-item:hover { background: rgba(255,255,255,.09); color: #fff; }
   .left-nav-item.active { background: rgba(255,255,255,.16); color: #fff; font-weight: 600; }
+  .nav-count {
+    margin-left: auto;
+    background: var(--primary);
+    color: #fff;
+    font-size: .7rem;
+    font-weight: 700;
+    line-height: 1;
+    padding: 3px 7px;
+    border-radius: 20px;
+    min-width: 20px;
+    text-align: center;
+  }
 
   .left-nav-actions {
     margin-top: 20px;

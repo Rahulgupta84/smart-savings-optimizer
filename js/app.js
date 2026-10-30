@@ -451,6 +451,7 @@ function confirmAddCards() {
   let added = 0;
   state.selectedCardIds.forEach(id => { if (addCard(id)) added++; });
   closeModal('modal-card-picker');
+  updateNavCounts();
   if (added > 0) {
     renderCards();
     renderSearchState();
@@ -487,6 +488,7 @@ function confirmPortalSelection() {
   existing.forEach(p => { if (!state.selectedPortalIds.has(p.portalId)) { removePortal(p.id); removed++; } });
   closeModal('modal-portal-selector');
   renderPortals();
+  updateNavCounts();
   renderSearchState();
   const msgs = [];
   if (added)   msgs.push(`Added ${added} portal${added > 1 ? 's' : ''}`);
@@ -637,7 +639,7 @@ function wireEvents() {
   document.getElementById('btn-add-card-empty').addEventListener('click', openCardPicker);
   document.getElementById('cards-list').addEventListener('click', e => {
     const btn = e.target.closest('[data-remove-card]');
-    if (btn) { removeCard(btn.dataset.removeCard); renderCards(); renderSearchState(); showToast('Card removed'); }
+    if (btn) { removeCard(btn.dataset.removeCard); renderCards(); updateNavCounts(); renderSearchState(); showToast('Card removed'); }
   });
 
   // Portals panel
@@ -645,7 +647,7 @@ function wireEvents() {
   document.getElementById('btn-add-portal-empty').addEventListener('click', openPortalSelector);
   document.getElementById('portals-list').addEventListener('click', e => {
     const btn = e.target.closest('[data-remove-portal]');
-    if (btn) { removePortal(btn.dataset.removePortal); renderPortals(); showToast('Portal removed'); }
+    if (btn) { removePortal(btn.dataset.removePortal); renderPortals(); updateNavCounts(); showToast('Portal removed'); }
   });
 
   // Card picker modal
@@ -726,11 +728,21 @@ function wireEvents() {
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
 
+function updateNavCounts() {
+  const cardCount   = getCards().length;
+  const portalCount = getPortals().length;
+  const cc = document.getElementById('nav-cards-count');
+  const pc = document.getElementById('nav-portals-count');
+  if (cc) { cc.textContent = cardCount;   cc.hidden = cardCount === 0; }
+  if (pc) { pc.textContent = portalCount; pc.hidden = portalCount === 0; }
+}
+
 function init() {
   applyTheme(getSettings().theme);
   wireEvents();
   renderCards();
   renderPortals();
+  updateNavCounts();
   renderSearchState();
   checkOnboarding();
 }
