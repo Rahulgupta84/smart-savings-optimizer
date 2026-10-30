@@ -230,7 +230,7 @@ function runSearch(query) {
 
 function renderResults(result) {
   state.lastResult = result;
-  const { merchant, recommendations, unusedBest } = result;
+  const { merchant, recommendations, unusedBest, saveMore } = result;
   const catMeta = CATEGORY_META[merchant.category] || CATEGORY_META.default;
 
   const displayName = merchant.displayName || state.lastQuery;
@@ -270,6 +270,32 @@ function renderResults(result) {
     document.getElementById('tip-banner').setAttribute('hidden','');
     document.getElementById('category-override').setAttribute('hidden','');
     return;
+  }
+
+  // Save More — cards the user doesn't have that would beat their current best
+  const saveMoreEl = document.getElementById('save-more-banner');
+  if (saveMoreEl) {
+    if (saveMore && saveMore.length) {
+      saveMoreEl.removeAttribute('hidden');
+      const chips = saveMore.map(s => {
+        const bonus = s.bonusLabel ? `<span class="save-more-bonus">${esc(s.bonusLabel)}</span>` : '';
+        return `<div class="save-more-chip">
+          <span class="save-more-chip-name">${esc(s.template.name)}</span>
+          ${bonus}
+          <span class="save-more-chip-rate">${fmt(s.cashbackEquiv)}</span>
+        </div>`;
+      }).join('');
+      saveMoreEl.innerHTML = `
+        <div class="save-more-card">
+          <div class="save-more-header">
+            <i class="ph ph-arrow-circle-up" aria-hidden="true"></i>
+            <span>Save More — cards you could add</span>
+          </div>
+          <div class="save-more-chips">${chips}</div>
+        </div>`;
+    } else {
+      saveMoreEl.setAttribute('hidden', '');
+    }
   }
 
   const execBonus = (merchant.category === 'wholesale' && state.wholesaleTier === 'executive') ? 2 : 0;

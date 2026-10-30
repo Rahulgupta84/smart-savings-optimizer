@@ -124,6 +124,43 @@ function getPortalRatesForMerchant(userPortals, merchantInfo) {
   return results.sort((a, b) => b.rate - a.rate);
 }
 
+// ─── Best Unused Cards (Save More suggestions) ───────────────────────────────
+
+function getBestUnusedCards(userCards, merchantInfo, userBestRate) {
+  const addedIds = new Set(userCards.map(c => c.templateId));
+  const category = merchantInfo.category;
+  const norm     = merchantInfo.normalizedInput;
+  const results  = [];
+
+  for (const template of CARD_TEMPLATES) {
+    if (addedIds.has(template.id)) continue;
+
+    const rewards = template.rewards || {};
+    let rate      = rewards[category] ?? rewards.default ?? 1;
+    let bonusLabel = null;
+
+    const bonus = template.currentBonus;
+    if (bonus) {
+      const catMatch      = bonus.categories && bonus.categories.includes(category);
+      const merchantMatch = bonus.merchants  && bonus.merchants.some(m => normalizeName(m) === norm);
+      if ((catMatch || merchantMatch) && bonus.rate > rate) {
+        rate       = bonus.rate;
+        bonusLabel = bonus.quarter;
+      }
+    }
+
+    let cashbackEquiv = (template.rewardType === 'points' || template.rewardType === 'miles')
+      ? rate * (template.pointValue || 0.01) * 100
+      : rate;
+
+    if (cashbackEquiv > userBestRate) {
+      results.push({ template, cashbackEquiv: +cashbackEquiv.toFixed(2), bonusLabel });
+    }
+  }
+
+  return results.sort((a, b) => b.cashbackEquiv - a.cashbackEquiv).slice(0, 2);
+}
+
 // ─── Best Portal From ALL portals (for upsell) ────────────────────────────────
 
 function getBestUnusedPortalRate(userPortals, merchantInfo) {
@@ -188,13 +225,16 @@ function getRecommendations(merchantInput, userCards, userPortals) {
     return true;
   });
 
-  const unusedBest = getBestUnusedPortalRate(userPortals, merchantInfo);
+  const unusedBest  = getBestUnusedPortalRate(userPortals, merchantInfo);
+  const userBestRate = unique.length > 0 ? unique[0].total : 0;
+  const saveMore    = getBestUnusedCards(userCards, merchantInfo, userBestRate);
 
   return {
     merchant:      merchantInfo,
     recommendations: unique.slice(0, 5),
     portalCount:   portalResults.length,
     unusedBest,
+    saveMore,
   };
 }
 
