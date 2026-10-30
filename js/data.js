@@ -380,6 +380,22 @@ const CARD_TEMPLATES = [
     },
     currentBonus: null,
   },
+  {
+    id: 'paypal-debit',
+    name: 'PayPal Debit Mastercard',
+    issuer: 'PayPal',
+    color: '#009CDE',
+    textColor: '#FFFFFF',
+    rewardType: 'cashback',
+    pointValue: 0.01,
+    tagline: '5% on one category/month, 1% everywhere else',
+    highlight: '5% chosen category · 1% everywhere · no fee',
+    annualFee: 0,
+    rewards: {
+      default: 1,
+    },
+    currentBonus: null,
+  },
   // ── Wells Fargo ────────────────────────────────────────────────────────────
   {
     id: 'wf-active',
