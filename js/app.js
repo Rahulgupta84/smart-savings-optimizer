@@ -23,6 +23,10 @@ function fmt(n) {
   return Number.isFinite(n) ? (Math.round(n * 10) / 10).toFixed(1) + '%' : '—';
 }
 
+function fmtPortal(n) {
+  return Number.isFinite(n) ? 'Up to ' + (Math.round(n * 10) / 10).toFixed(1) + '%' : '—';
+}
+
 function fmtDate(d) {
   if (!d) return '';
   return new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -233,7 +237,7 @@ function renderResults(result) {
       <div class="upsell-card">
         <div class="upsell-icon"><i class="ph ph-lightbulb" aria-hidden="true"></i></div>
         <div class="upsell-info">
-          <div class="upsell-title">+${unusedBest.rate}% more with ${esc(unusedBest.portalDef.name)}</div>
+          <div class="upsell-title">Up to +${unusedBest.rate}% more with ${esc(unusedBest.portalDef.name)}</div>
           <div class="upsell-body">Add ${esc(unusedBest.portalDef.name)} in My Portals to stack this cashback.</div>
         </div>
       </div>`;
@@ -281,7 +285,7 @@ function buildBestComboCard(combo, merchant) {
           <div class="breakdown-name">${esc(portal.portalDef.name)}</div>
           <div class="breakdown-detail">${freshHtml}${staleHtml}</div>
         </div>
-        <div class="breakdown-rate">+${fmt(portal.rate)}</div>
+        <div class="breakdown-rate">${fmtPortal(portal.rate)}</div>
       </div>`;
   })() : '';
 
@@ -295,7 +299,7 @@ function buildBestComboCard(combo, merchant) {
   return `
     <div class="best-combo-card">
       <div class="best-label"><i class="ph ph-trophy" aria-hidden="true"></i> Best Combo</div>
-      <div class="best-total">${fmt(total)}</div>
+      <div class="best-total">${portal ? fmtPortal(total) : fmt(total)}</div>
       <div class="best-total-label">total savings${portal ? ' stacked' : ''}</div>
       <div class="best-breakdown">
         <div class="breakdown-row">
@@ -318,7 +322,7 @@ function buildComboRow(combo, rank) {
   const portal = combo.portal;
   const names  = portal ? `${tmpl.name} + ${portal.portalDef.name}` : tmpl.name;
   const detail = portal
-    ? `${fmt(combo.card.cashbackEquiv)} card + ${fmt(portal.rate)} portal`
+    ? `${fmt(combo.card.cashbackEquiv)} card + ${fmtPortal(portal.rate)} portal`
     : `${fmt(combo.card.cashbackEquiv)} card cashback`;
   return `
     <div class="combo-card">
