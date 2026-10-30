@@ -209,6 +209,7 @@ function closeAutocomplete() {
 function runSearch(query) {
   if (!query || query.length < 2) return;
   closeAutocomplete();
+  document.getElementById('search-clear').hidden = false;
   const cards = getCards();
   if (!cards.length) return;
 
