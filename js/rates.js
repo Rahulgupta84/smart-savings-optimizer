@@ -56,23 +56,25 @@ async function loadLiveRates() {
     if (json.status !== 'ok') return;
 
     const table = json.table;
-    // Sheet layout (gviz treats row 1 as the column-header row):
-    //   table.cols[0].label = "Last updated: ..."  (merged header row)
-    //   table.rows[0]       = actual column headers: Store | BeFrugal | ExtraBux | …
-    //   table.rows[1+]      = store data rows
-    if (!table.rows || table.rows.length < 2) return;
+    // Sheet layout — all rows appear in table.rows:
+    //   rows[0]  = "Last updated: October 29, 2026, …"  (skip, extract date)
+    //   rows[1]  = column headers: Store | BeFrugal | ExtraBux | …
+    //   rows[2+] = store data rows
+    if (!table.rows || table.rows.length < 3) return;
 
-    // Extract date from the "Last updated" label if present
-    const labelText = (table.cols[0] && table.cols[0].label) || '';
-    const dateMatch = labelText.match(/(\d{4}-\d{2}-\d{2})/);
-    const fileDate  = dateMatch ? dateMatch[1] : new Date().toISOString().split('T')[0];
+    // Extract date from the "Last updated" cell
+    const tsText   = String((table.rows[0].c[0] && table.rows[0].c[0].v) || '');
+    const datePart = tsText.replace('Last updated:', '').trim(); // "October 29, 2026, 10:41 PM PDT"
+    const parsed   = new Date(datePart);
+    const fileDate = isNaN(parsed) ? new Date().toISOString().split('T')[0]
+                                   : parsed.toISOString().split('T')[0];
 
-    // Header row (row 2 of the sheet): ["Store", "BeFrugal", "ExtraBux", …]
-    const headerCells = table.rows[0].c || [];
+    // Header row: ["Store", "BeFrugal", "ExtraBux", "Mr. Rebates", …]
+    const headerCells = table.rows[1].c || [];
     const headers = headerCells.map(cell => cell ? String(cell.v || '') : '');
 
     let updated = 0;
-    for (let i = 1; i < table.rows.length; i++) {
+    for (let i = 2; i < table.rows.length; i++) {
       const cells = table.rows[i].c;
       if (!cells || !cells[0]) continue;
       const storeName = String(cells[0].v || '').trim();
