@@ -562,6 +562,12 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   line-height: 1;
   margin-bottom: 2px;
 }
+.best-savings-amount {
+  font-size: .88rem;
+  color: rgba(255,255,255,.75);
+  margin-bottom: 2px;
+  font-weight: 500;
+}
 .best-total-label {
   font-size: .82rem;
   color: rgba(255,255,255,.65);
@@ -665,8 +671,10 @@ input, textarea, select { font-family: inherit; font-size: 1rem; }
   text-overflow: ellipsis;
 }
 .combo-details { font-size: .77rem; color: var(--text-2); margin-top: 2px; }
-.combo-rate    { font-size: 1.1rem; font-weight: 800; color: var(--success-2); flex-shrink: 0; }
+.combo-rate-wrap { display: flex; flex-direction: column; align-items: flex-end; flex-shrink: 0; }
+.combo-rate    { font-size: 1.1rem; font-weight: 800; color: var(--success-2); }
 [data-theme="light"] .combo-rate { color: var(--success); }
+.combo-savings { font-size: .72rem; color: var(--text-2); margin-top: 1px; }
 
 /* Stale warning */
 .stale-badge {

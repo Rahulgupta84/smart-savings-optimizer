@@ -27,6 +27,10 @@ function fmtPortal(n) {
   return Number.isFinite(n) ? 'Up to ' + (Math.round(n * 10) / 10).toFixed(1) + '%' : '—';
 }
 
+function fmtDollar(rate) {
+  return '$' + (Math.round(rate * 100) / 100).toFixed(2);
+}
+
 function fmtDate(d) {
   if (!d) return '';
   return new Date(d).toLocaleDateString('en-US', { month: 'short', year: 'numeric' });
@@ -367,6 +371,7 @@ function buildBestComboCard(combo, merchant) {
     <div class="best-combo-card">
       <div class="best-label"><i class="ph ph-trophy" aria-hidden="true"></i> Best Combo</div>
       <div class="best-total">${portal ? fmtPortal(total) : fmt(total)}</div>
+      <div class="best-savings-amount">≈ ${fmtDollar(total)} saved on $100</div>
       <div class="best-total-label">total savings${portal ? ' stacked' : ''}</div>
       <div class="best-breakdown">
         <div class="breakdown-row">
@@ -398,7 +403,10 @@ function buildComboRow(combo, rank) {
         <div class="combo-names">${esc(names)}</div>
         <div class="combo-details">${detail}</div>
       </div>
-      <div class="combo-rate">${fmt(combo.total)}</div>
+      <div class="combo-rate-wrap">
+        <div class="combo-rate">${fmt(combo.total)}</div>
+        <div class="combo-savings">≈ ${fmtDollar(combo.total)}</div>
+      </div>
     </div>`;
 }
 
