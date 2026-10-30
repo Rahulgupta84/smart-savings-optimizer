@@ -7,6 +7,8 @@
 const BANK_OFFERS_API = 'https://data.offer.love/v1';
 
 function _bankKey() {
+  // config.js (gitignored) wins; falls back to key saved in the app sidebar
+  if (typeof BANK_OFFERS_KEY !== 'undefined' && BANK_OFFERS_KEY) return BANK_OFFERS_KEY;
   try { return localStorage.getItem('soa_bank_key') || ''; } catch { return ''; }
 }
 
