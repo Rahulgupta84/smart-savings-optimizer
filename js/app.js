@@ -614,6 +614,7 @@ function confirmAddCards() {
     renderCards();
     renderSearchState();
     showToast(`Added ${addedCards.length} card${addedCards.length > 1 ? 's' : ''}`, 'success');
+    debouncedSync();
     // Prompt for category on cards that need it
     const needsCat = addedCards.find(c => CARD_TEMPLATES.find(t => t.id === c.templateId)?.chosenCategories);
     if (needsCat) openCategoryPicker(needsCat.id);
@@ -678,7 +679,7 @@ function confirmPortalSelection() {
   const msgs = [];
   if (added)   msgs.push(`Added ${added} portal${added > 1 ? 's' : ''}`);
   if (removed) msgs.push(`Removed ${removed}`);
-  if (msgs.length) showToast(msgs.join(', '), 'success');
+  if (msgs.length) { showToast(msgs.join(', '), 'success'); debouncedSync(); }
 }
 
 // ─── Modal helper ─────────────────────────────────────────────────────────────
@@ -847,7 +848,7 @@ function wireEvents() {
   document.getElementById('btn-add-card-empty').addEventListener('click', openCardPicker);
   document.getElementById('cards-list').addEventListener('click', e => {
     const removeBtn = e.target.closest('[data-remove-card]');
-    if (removeBtn) { removeCard(removeBtn.dataset.removeCard); renderCards(); updateNavCounts(); renderSearchState(); showToast('Card removed'); return; }
+    if (removeBtn) { removeCard(removeBtn.dataset.removeCard); renderCards(); updateNavCounts(); renderSearchState(); showToast('Card removed'); debouncedSync(); return; }
     const catBtn = e.target.closest('[data-choose-category]');
     if (catBtn) openCategoryPicker(catBtn.dataset.chooseCategory);
   });
@@ -861,6 +862,7 @@ function wireEvents() {
       renderCards();
       renderSearchState();
       showToast('Category saved', 'success');
+      debouncedSync();
     }
     if (e.target.id === 'modal-category-picker') document.getElementById('modal-category-picker').setAttribute('hidden','');
   });
@@ -872,7 +874,7 @@ function wireEvents() {
   document.getElementById('btn-add-portal-empty').addEventListener('click', openPortalSelector);
   document.getElementById('portals-list').addEventListener('click', e => {
     const btn = e.target.closest('[data-remove-portal]');
-    if (btn) { removePortal(btn.dataset.removePortal); renderPortals(); updateNavCounts(); showToast('Portal removed'); }
+    if (btn) { removePortal(btn.dataset.removePortal); renderPortals(); updateNavCounts(); showToast('Portal removed'); debouncedSync(); }
   });
 
   // Card picker modal
@@ -948,15 +950,170 @@ function wireEvents() {
     }
     state.selectedCardIds.forEach(id => addCard(id));
     state.selectedCardIds.clear();
+    debouncedSync();
     setOnboardingStep(3);
     renderObPortalSelector();
   });
   if (obPortalsDone) obPortalsDone.addEventListener('click', () => {
     state.selectedPortalIds.forEach(id => addPortal(id));
     state.selectedPortalIds.clear();
+    debouncedSync();
     finishOnboarding();
   });
   if (obPortalsSkip) obPortalsSkip.addEventListener('click', finishOnboarding);
+}
+
+// ─── Auth UI ──────────────────────────────────────────────────────────────────
+
+function _getInitials(user) {
+  if (user.displayName) {
+    return user.displayName.split(/\s+/).map(w => w[0]).join('').toUpperCase().slice(0, 2);
+  }
+  return (user.email || '?')[0].toUpperCase();
+}
+
+function renderAuthState(user) {
+  const signinBtns  = document.querySelectorAll('.auth-signin-btn');
+  const accountBtns = document.querySelectorAll('.auth-account-btn');
+  const initialsEls = document.querySelectorAll('.auth-initials');
+  if (user) {
+    const initials = _getInitials(user);
+    signinBtns.forEach(el  => { el.hidden = true; });
+    accountBtns.forEach(el => { el.hidden = false; });
+    initialsEls.forEach(el => { el.textContent = initials; });
+  } else {
+    signinBtns.forEach(el  => { el.hidden = false; });
+    accountBtns.forEach(el => { el.hidden = true; });
+  }
+}
+
+function openAuthModal() {
+  const errEl = document.getElementById('auth-err');
+  if (errEl) { errEl.hidden = true; errEl.textContent = ''; }
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
+  ['btn-google-signin','btn-email-signin','btn-email-signup'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.disabled = false;
+  });
+  document.getElementById('modal-auth').removeAttribute('hidden');
+}
+
+function closeAuthModal() {
+  document.getElementById('modal-auth').setAttribute('hidden', '');
+}
+
+function openAccountPopover() {
+  const user = getCurrentUser();
+  if (!user) return;
+  document.getElementById('account-name').textContent   = user.displayName || '';
+  document.getElementById('account-email-display').textContent = user.email || '';
+  document.getElementById('account-initials-lg').textContent   = _getInitials(user);
+  document.getElementById('popover-account').removeAttribute('hidden');
+}
+
+function closeAccountPopover() {
+  document.getElementById('popover-account').setAttribute('hidden', '');
+}
+
+function _showAuthError(msg) {
+  const el = document.getElementById('auth-err');
+  if (!el) return;
+  el.textContent = msg;
+  el.hidden = false;
+}
+
+function _friendlyAuthError(code) {
+  return {
+    'auth/user-not-found':       'No account found with that email.',
+    'auth/wrong-password':       'Incorrect password.',
+    'auth/invalid-credential':   'Email or password is incorrect.',
+    'auth/email-already-in-use': 'An account with this email already exists.',
+    'auth/invalid-email':        'Please enter a valid email address.',
+    'auth/too-many-requests':    'Too many attempts. Please try again later.',
+    'auth/weak-password':        'Password must be at least 6 characters.',
+    'auth/popup-closed-by-user': 'Sign-in was cancelled.',
+  }[code] || 'Sign-in failed. Please try again.';
+}
+
+function wireAuthEvents() {
+  document.querySelectorAll('.auth-signin-btn').forEach(btn =>
+    btn.addEventListener('click', openAuthModal));
+  document.querySelectorAll('.auth-account-btn').forEach(btn =>
+    btn.addEventListener('click', openAccountPopover));
+
+  document.getElementById('close-auth-modal').addEventListener('click', closeAuthModal);
+  document.getElementById('modal-auth').addEventListener('click', e => {
+    if (e.target.id === 'modal-auth') closeAuthModal();
+  });
+
+  document.getElementById('btn-google-signin').addEventListener('click', async () => {
+    const btn = document.getElementById('btn-google-signin');
+    btn.disabled = true;
+    try {
+      await signInWithGoogle();
+      closeAuthModal();
+    } catch (e) {
+      _showAuthError(_friendlyAuthError(e.code));
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('btn-email-signin').addEventListener('click', async () => {
+    const email = document.getElementById('auth-email').value.trim();
+    const pass  = document.getElementById('auth-password').value;
+    if (!email || !pass) { _showAuthError('Please enter your email and password.'); return; }
+    const btn = document.getElementById('btn-email-signin');
+    btn.disabled = true;
+    try {
+      await signInWithEmail(email, pass);
+      closeAuthModal();
+    } catch (e) {
+      _showAuthError(_friendlyAuthError(e.code));
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('btn-email-signup').addEventListener('click', async () => {
+    const email = document.getElementById('auth-email').value.trim();
+    const pass  = document.getElementById('auth-password').value;
+    if (!email || !pass) { _showAuthError('Please enter an email and password.'); return; }
+    const btn = document.getElementById('btn-email-signup');
+    btn.disabled = true;
+    try {
+      await signUpWithEmail(email, pass);
+      closeAuthModal();
+    } catch (e) {
+      _showAuthError(_friendlyAuthError(e.code));
+      btn.disabled = false;
+    }
+  });
+
+  document.getElementById('close-account-popover').addEventListener('click', closeAccountPopover);
+  document.getElementById('popover-account').addEventListener('click', e => {
+    if (e.target.id === 'popover-account') closeAccountPopover();
+  });
+  document.getElementById('btn-signout').addEventListener('click', async () => {
+    await signOut();
+    closeAccountPopover();
+    showToast('Signed out');
+  });
+}
+
+function initFirebaseAuth() {
+  if (!initFirebase()) return; // Firebase not configured — silent no-op
+  wireAuthEvents();
+  onAuthStateChange(async user => {
+    renderAuthState(user);
+    if (user) {
+      await handleSignIn();
+      renderCards();
+      renderPortals();
+      updateNavCounts();
+      renderSearchState();
+      showToast('Data synced', 'success');
+    }
+  });
 }
 
 // ─── Init ─────────────────────────────────────────────────────────────────────
@@ -979,6 +1136,7 @@ function init() {
   updateNavCounts();
   renderSearchState();
   checkOnboarding();
+  initFirebaseAuth();        // sets up login if Firebase is configured
 }
 
 document.addEventListener('DOMContentLoaded', init);

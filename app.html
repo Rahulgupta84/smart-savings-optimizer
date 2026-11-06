@@ -11,6 +11,93 @@
   <link rel="stylesheet" href="css/styles.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/regular/style.css">
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@phosphor-icons/web@2.1.1/src/fill/style.css">
+  <style>
+    /* ── Auth UI ──────────────────────────────────────────────────────────── */
+    .btn-avatar-compact {
+      width: 32px; height: 32px; border-radius: 50%;
+      background: var(--primary); color: #fff;
+      font-size: .72rem; font-weight: 700; letter-spacing: .02em;
+      display: inline-flex; align-items: center; justify-content: center;
+      border: 2px solid transparent; transition: border-color .15s, opacity .15s;
+    }
+    .btn-avatar-compact:hover { border-color: var(--primary); opacity: .85; }
+
+    /* Auth modal */
+    .auth-modal { max-width: 400px; }
+    .auth-modal-desc {
+      font-size: .85rem; color: var(--text-2); margin-bottom: 20px; line-height: 1.55;
+    }
+    .btn-google {
+      width: 100%; padding: 11px 16px; border-radius: var(--radius);
+      background: var(--surface-1); border: 1.5px solid var(--border);
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      font-size: .9rem; font-weight: 500; color: var(--text-1);
+      transition: background .15s, box-shadow .15s;
+    }
+    .btn-google:hover { background: var(--surface-2); box-shadow: var(--shadow-sm); }
+    .btn-google:disabled { opacity: .6; cursor: default; }
+    .auth-divider {
+      display: flex; align-items: center; gap: 12px;
+      margin: 18px 0; font-size: .78rem; color: var(--text-3);
+    }
+    .auth-divider::before, .auth-divider::after {
+      content: ''; flex: 1; height: 1px; background: var(--border);
+    }
+    .auth-form { display: flex; flex-direction: column; gap: 10px; }
+    .auth-input {
+      width: 100%; padding: 10px 14px; border-radius: var(--radius-sm);
+      border: 1.5px solid var(--border); background: var(--surface-1);
+      font: 400 .9rem var(--font-body); color: var(--text-1);
+      transition: border-color .15s;
+    }
+    .auth-input:focus { outline: none; border-color: var(--primary); }
+    .auth-err {
+      font-size: .82rem; color: #EF4444;
+      padding: 8px 12px; background: rgba(239,68,68,.08);
+      border-radius: var(--radius-sm); line-height: 1.4;
+    }
+    .auth-form-actions { display: flex; gap: 8px; margin-top: 2px; }
+    .auth-form-actions .btn-primary,
+    .auth-form-actions .btn-secondary { flex: 1; justify-content: center; }
+    .auth-form-actions button:disabled { opacity: .6; cursor: default; }
+
+    /* Account popover */
+    .account-popover {
+      background: var(--surface-1); border-radius: var(--radius-lg);
+      padding: 20px; width: min(90vw, 320px);
+      box-shadow: var(--shadow-xl); margin: auto; position: relative;
+    }
+    .account-popover-header {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 16px;
+    }
+    .account-avatar-lg {
+      width: 44px; height: 44px; border-radius: 50%; flex-shrink: 0;
+      background: var(--primary); color: #fff;
+      display: flex; align-items: center; justify-content: center;
+      font-size: .95rem; font-weight: 700;
+    }
+    .account-info { flex: 1; min-width: 0; }
+    .account-name  { font-weight: 600; font-size: .9rem; color: var(--text-1); }
+    .account-email {
+      font-size: .78rem; color: var(--text-2);
+      white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    }
+    .account-sync-row {
+      display: flex; align-items: center; gap: 8px;
+      padding: 10px 12px; border-radius: var(--radius-sm);
+      background: rgba(16,185,129,.1); color: #059669;
+      font-size: .82rem; margin-bottom: 16px;
+    }
+    .account-sync-row i { font-size: 1rem; }
+    .btn-signout {
+      width: 100%; padding: 10px 14px; border-radius: var(--radius-sm);
+      background: var(--surface-2); border: 1.5px solid var(--border);
+      color: var(--text-1); font-size: .88rem; font-weight: 500;
+      display: flex; align-items: center; justify-content: center; gap: 8px;
+      transition: background .15s;
+    }
+    .btn-signout:hover { background: var(--surface-3); }
+  </style>
 </head>
 <body>
 <div id="app">
@@ -25,6 +112,8 @@
       <div class="header-actions">
         <a href="index.html" class="icon-btn" title="Back to Home" aria-label="Back to Home" style="text-decoration:none;display:inline-flex;align-items:center"><i class="ph ph-house" aria-hidden="true"></i></a>
         <button id="btn-export" class="icon-btn" title="Export data" aria-label="Export data"><i class="ph ph-download-simple" aria-hidden="true"></i></button>
+        <button id="btn-signin-header" class="icon-btn auth-signin-btn" title="Sign in to sync across devices" aria-label="Sign in"><i class="ph ph-user" aria-hidden="true"></i></button>
+        <button id="btn-account-header" class="btn-avatar-compact auth-account-btn" title="Account" aria-label="Account" hidden><span class="auth-initials"></span></button>
         <button id="btn-theme"  class="icon-btn" title="Toggle theme" aria-label="Toggle theme"><i class="ph ph-moon" aria-hidden="true"></i></button>
       </div>
     </div>
@@ -64,6 +153,8 @@
       <a href="index.html" class="icon-btn" title="Back to Home" aria-label="Back to Home" style="text-decoration:none;display:inline-flex;align-items:center"><i class="ph ph-house" aria-hidden="true"></i></a>
       <button id="btn-theme-nav" class="icon-btn" title="Toggle theme" aria-label="Toggle theme"><i class="ph ph-moon" aria-hidden="true"></i></button>
       <button id="btn-export-nav" class="icon-btn" title="Export data" aria-label="Export data"><i class="ph ph-download-simple" aria-hidden="true"></i></button>
+      <button id="btn-signin-nav" class="icon-btn auth-signin-btn" title="Sign in to sync across devices" aria-label="Sign in"><i class="ph ph-user" aria-hidden="true"></i></button>
+      <button id="btn-account-nav" class="btn-avatar-compact auth-account-btn" title="Account" aria-label="Account" hidden><span class="auth-initials"></span></button>
     </div>
   </aside>
 
@@ -203,6 +294,61 @@
       <span>Portals</span>
     </button>
   </nav>
+
+  <!-- ── Modal: Auth ──────────────────────────────────────────────────────────── -->
+  <div id="modal-auth" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-labelledby="auth-modal-title">
+    <div class="modal auth-modal">
+      <div class="modal-handle"></div>
+      <div class="modal-header">
+        <h3 id="auth-modal-title">Sync across devices</h3>
+        <button id="close-auth-modal" class="modal-close" aria-label="Close"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="modal-body" style="padding-top:16px">
+        <p class="auth-modal-desc">Your cards and portals are saved on this device. Sign in to keep them synced across all your devices.</p>
+        <button id="btn-google-signin" class="btn-google">
+          <svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true">
+            <path fill="#EA4335" d="M24 9.5c3.54 0 6.71 1.22 9.21 3.6l6.85-6.85C35.9 2.38 30.47 0 24 0 14.62 0 6.51 5.38 2.56 13.22l7.98 6.19C12.43 13.72 17.74 9.5 24 9.5z"/>
+            <path fill="#4285F4" d="M46.98 24.55c0-1.57-.15-3.09-.38-4.55H24v9.02h12.94c-.58 2.96-2.26 5.48-4.78 7.18l7.73 6c4.51-4.18 7.09-10.36 7.09-17.65z"/>
+            <path fill="#FBBC05" d="M10.53 28.59c-.48-1.45-.76-2.99-.76-4.59s.27-3.14.76-4.59l-7.98-6.19C.92 16.46 0 20.12 0 24c0 3.88.92 7.54 2.56 10.78l7.97-6.19z"/>
+            <path fill="#34A853" d="M24 48c6.48 0 11.93-2.13 15.89-5.81l-7.73-6c-2.15 1.45-4.92 2.3-8.16 2.3-6.26 0-11.57-4.22-13.47-9.91l-7.98 6.19C6.51 42.62 14.62 48 24 48z"/>
+            <path fill="none" d="M0 0h48v48H0z"/>
+          </svg>
+          Continue with Google
+        </button>
+        <div class="auth-divider"><span>or sign in with email</span></div>
+        <div class="auth-form">
+          <input id="auth-email" type="email" placeholder="Email address" autocomplete="email" class="auth-input">
+          <input id="auth-password" type="password" placeholder="Password" autocomplete="current-password" class="auth-input">
+          <div id="auth-err" class="auth-err" hidden></div>
+          <div class="auth-form-actions">
+            <button id="btn-email-signin" class="btn-primary">Sign in</button>
+            <button id="btn-email-signup" class="btn-secondary">Create account</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Account Popover ──────────────────────────────────────────────────────── -->
+  <div id="popover-account" class="modal-overlay" hidden role="dialog" aria-modal="true" aria-label="Account">
+    <div class="account-popover">
+      <div class="account-popover-header">
+        <div class="account-avatar-lg"><span id="account-initials-lg"></span></div>
+        <div class="account-info">
+          <div id="account-name" class="account-name"></div>
+          <div id="account-email-display" class="account-email"></div>
+        </div>
+        <button id="close-account-popover" class="modal-close" aria-label="Close"><i class="ph ph-x" aria-hidden="true"></i></button>
+      </div>
+      <div class="account-sync-row">
+        <i class="ph ph-cloud-check" aria-hidden="true"></i>
+        <span>Your data syncs across devices</span>
+      </div>
+      <button id="btn-signout" class="btn-signout">
+        <i class="ph ph-sign-out" aria-hidden="true"></i> Sign out
+      </button>
+    </div>
+  </div>
 
   <!-- ── Modal: Card Picker ─────────────────────────────────────────────────── -->
   <div id="modal-card-picker" class="modal-overlay" hidden>
@@ -355,6 +501,13 @@
 <script src="js/config.js" onerror="void 0"></script>
 <script src="js/bankers.js"></script>
 <script src="js/engine.js"></script>
+<!-- Firebase compat SDK — only loaded when firebase-config.js exists -->
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js" onerror="void 0"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js" onerror="void 0"></script>
+<script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js" onerror="void 0"></script>
+<script src="js/firebase-config.js" onerror="void 0"></script>
+<script src="js/auth.js"></script>
+<script src="js/sync.js"></script>
 <script src="js/app.js"></script>
 </body>
 </html>

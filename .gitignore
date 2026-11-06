@@ -11,3 +11,4 @@ Thumbs.db
 
 # Local API keys — never commit
 js/config.js
+js/firebase-config.js
